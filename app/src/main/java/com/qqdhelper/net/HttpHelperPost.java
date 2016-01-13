@@ -53,7 +53,7 @@ public class HttpHelperPost {
         localHashMap.put("zy", "zh");//运行语言
         localHashMap.put("zx", str1);//当前时间
         localHashMap.put("zw", "868568021407369");//机器imei
-        localHashMap.put("zv", "113.116.62.159");//当前网络ip   我们随机ip
+        localHashMap.put("zv", "113.117.25.103");//当前网络ip   我们随机ip
         localHashMap.put("zu", "Xiaomi MI 4LTE");//机器型号
         localHashMap.put("zt", "4.4.4");//系统版本
         localHashMap.put("zs", "2");//不明==========

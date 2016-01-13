@@ -20,11 +20,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 public class QueryProuder implements Runnable {
     private final String mKey;
+    private String current_Time;
     Context mContext;
 
     public QueryProuder(Context context, String key) {
@@ -34,8 +37,8 @@ public class QueryProuder implements Runnable {
 
     public int getRodm() {
         java.util.Random random = new java.util.Random();// 定义随机类
-        int result = random.nextInt(6);// 返回[0,10)集合中的整数，注意不包括10
-        return (result + 10) * 1000;              // +1后，[0,10)集合变为[1,11)集合，满足要求
+        int result = random.nextInt(6) + 5;// 返回[5,10)集合中的整数，注意不包括10
+        return (result + 1) * 1000;              // +1后，[5,10)集合变为[6,11)集合，满足要求
     }
 
     @Override
@@ -60,8 +63,13 @@ public class QueryProuder implements Runnable {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                Date d = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//年-月-日 时:分:秒:毫秒
+                current_Time = sdf.format(d).toString();
+                System.out.println("当前时间："+sdf.format(d));
                 HashMap<String, String> param = new HashMap<>();
-                param.put("a", "71901");
+                //param.put("a", "71901");
+                param.put("a", BaseApplication.getApplication().getLogin_Int(Constants.USER_B)+"");
                 param.put("c", "1");
                 param.put("d", "15");
                 param.put("e", "0");
@@ -75,22 +83,36 @@ public class QueryProuder implements Runnable {
                         Gson a = new Gson();
                         ProuderList prouderList = a.fromJson(responseInfo.result.toString(), ProuderList.class);
                         if (prouderList.getCode() == 0) {
-//                            System.out.println("登录返回数据：" + mLoginbean.toString());
-//                            Toast.makeText(mContext, prouderList.getHint(), Toast.LENGTH_SHORT).show();
+//                          Toast.makeText(mContext, prouderList.getHint(), Toast.LENGTH_SHORT).show();
                             List<ProuderItem> list = prouderList.getA();
                             if (list != null) {
                                 for (ProuderItem prouderItem : list) {
                                     if (prouderItem.getF() > 0) {
                                         SendMail sm = new SendMail();
                                         for (String receicveer : Constant.receiveer) {
-                                            sm.sendMails(receicveer, "啊啊啊啊去抢吧~" + cityName + prouderItem.getK() + "的" + mKey + "商品的数量:" + prouderItem.getF(), new StringBuffer(
-                                                    "各位加油~  么么哒~"));
+                                            boolean city_Flag;
+                                            if (prouderItem.getK().toString().indexOf(prouderItem.getK().toString().valueOf('市')) == -1) {
+                                                //字符串中不存在 市
+                                                if (prouderItem.getK().toString().indexOf(prouderItem.getK().toString().valueOf('县')) != -1 || prouderItem.getK().toString().indexOf(prouderItem.getK().toString().valueOf('区')) != -1) {
+                                                    city_Flag = true;
+                                                } else {
+                                                    city_Flag = false;
+                                                }
+                                            } else {
+                                                city_Flag = false;
+                                            }
+
+                                            if (city_Flag) {
+                                                sm.sendMails(receicveer, "Teemo提醒您：" + cityName + prouderItem.getK() + "的 " + mKey + " 有货啦！！！", new StringBuffer(
+                                                        "赶快打开QQD，去 <U>"+ cityName + prouderItem.getK()+"</U> 兑换 <U>"+ mKey +"</U> 当前数量：<U>"+ prouderItem.getF() +"</U>  数量有限，先到先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  "+ current_Time + "</p>"));
+                                            } else {
+                                                sm.sendMails(receicveer, "Teemo提醒您：" + prouderItem.getK() + "的 " + mKey + " 有货啦！！！", new StringBuffer(
+                                                        "赶快打开QQD，去 <U>"+ prouderItem.getK()+"</U> 兑换 <U>"+ mKey +"</U> 当前数量：<U>"+ prouderItem.getF() +"</U>  数量有限，先到先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  "+ current_Time + "</p>"));
+                                            }
                                         }
                                     }
                                 }
                             }
-                            System.out.println("登录getLoginInt：" + BaseApplication.getApplication().getLogin_Int(Constants.USER_B));
-                            System.out.println("登录getLoginString：" + BaseApplication.getApplication().getLogin_String(Constants.USER_A));
                         } else {
 //                            mBaseBean = a.fromJson(responseInfo.result.toString(), BaseBean.class);
                             Toast.makeText(mContext, prouderList.getHint(), Toast.LENGTH_SHORT).show();

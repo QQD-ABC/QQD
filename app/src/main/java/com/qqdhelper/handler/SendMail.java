@@ -102,7 +102,7 @@ public class SendMail {
                 public void run() {
                     try {
                         SendMail.this.smtp(mailAddress, subject, content);
-                        System.out.print("邮件成功~");
+                        System.out.println("发送邮件成功~");
                     } catch (MessagingException e) {
                         e.printStackTrace();
                     }

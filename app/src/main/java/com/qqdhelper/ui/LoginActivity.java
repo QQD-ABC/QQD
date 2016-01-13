@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private AutoCompleteTextView mphoneView;
     private EditText mPasswordView;
     private LoginBean mLoginbean;
-    private String phone_aa = "15677811470";
+    private String phone_aa = "13175076341";
 
     private String phone;
     private String password;
@@ -116,13 +116,12 @@ public class LoginActivity extends AppCompatActivity {
 //
 //            param.put("a", phone);
 //            param.put("b", z.getRSA(this, password));
-
-            System.out.println("密码源文:" + password);
-            System.out.println("密码密文:" + z.getRSA(this, password));
+//            System.out.println("密码源文:" + password);
+//            System.out.println("密码密文:" + z.getRSA(this, password));
 
           phone = phone_aa;
           param.put("a", phone);
-          param.put("b", z.getRSA(this, "a123456"));
+          param.put("b", z.getRSA(this, "a1234567"));
           System.out.println("密码:" + z.getRSA(this, "a1234567"));
 
             doPost("http://4.everything4free.com/a/aa", param);
