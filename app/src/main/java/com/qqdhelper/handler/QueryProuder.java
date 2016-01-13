@@ -110,6 +110,7 @@ public class QueryProuder implements Runnable {
 
                         , null);
             }
+            new Thread(new QueryProuder(mContext,mKey)).start();
         }
     }
 }
