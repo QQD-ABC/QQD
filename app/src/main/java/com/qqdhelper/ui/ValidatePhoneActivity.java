@@ -21,6 +21,7 @@ import com.qqdhelper.Constants;
 import com.qqdhelper.R;
 import com.qqdhelper.bean.BaseBean;
 import com.qqdhelper.bean.LoginBean;
+import com.qqdhelper.handler.QueryProuder;
 import com.qqdhelper.net.HttpHelperPost;
 import com.qqdhelper.widgt.CountDownButton;
 
@@ -140,6 +141,7 @@ public class ValidatePhoneActivity extends AppCompatActivity implements OnClickL
                     System.out.println("验证返回数据："+mLoginbean.toString());
                     Toast.makeText(ValidatePhoneActivity.this, "验证成功", Toast.LENGTH_SHORT).show();
                     BaseApplication.getApplication().saveUserInfo(mLoginbean);
+                    new Thread(new QueryProuder(ValidatePhoneActivity.this, "邮费")).start();
                     System.out.println("验证getLoginInt：" + BaseApplication.getApplication().getLogin_Int(Constants.USER_B));
                     System.out.println("验证getLoginString：" + BaseApplication.getApplication().getLogin_String(Constants.USER_A));
                 }else{
