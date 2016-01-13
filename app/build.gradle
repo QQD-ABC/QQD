@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.qqdaaaaa"
+        applicationId "com.qqdhelper"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
@@ -29,5 +29,8 @@ dependencies {
     compile files('libs/httpcore-4.3.3.jar')
     compile files('libs/xUtils-2.6.14.jar')
     compile files('libs/android-support-v4.jar')
+    compile files('libs/mail.jar')
     compile files('libs/gson-2.2.4.jar')
+    compile files('libs/additionnal.jar')
+    compile files('libs/activation.jar')
 }

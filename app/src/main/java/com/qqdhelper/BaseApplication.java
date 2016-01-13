@@ -15,6 +15,7 @@ public class BaseApplication extends Application {
     private String UUID;
     private int userId;
     private String userPhone;
+    private String cityCode;
 
     private SharedPreferences mSharedPreferences;//保存本地资料
 
@@ -52,8 +53,17 @@ public class BaseApplication extends Application {
         editor.commit();
     }
 
+
     public int getLogin_Int(String param) {
         return mSharedPreferences.getInt(param, 0);
+    }
+
+    public String getCityCode() {
+        return cityCode;
+    }
+
+    public void setCityCode(String cityCode) {
+        this.cityCode = cityCode;
     }
 
     public String getLogin_String(String param) {
