@@ -5,7 +5,7 @@ import android.content.Context;
 import com.lidroid.xutils.exception.HttpException;
 
 /**
- * Created by Administrator on 2016/1/12.
+ * Created by sdash on 2016/1/12.
  */
 public abstract class SnscityRequestCallBack<T> {
     public abstract void onFailure(HttpException paramHttpException, String paramString);
