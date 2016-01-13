@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        }, null);
         z.getRSA(this, "a123456");
-//        new Thread(new QueryProuder(this)).start();
     }
 
     @Override

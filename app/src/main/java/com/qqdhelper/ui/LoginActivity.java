@@ -21,13 +21,11 @@ import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.qqdhelper.BaseApplication;
 import com.qqdhelper.Constants;
-import com.qqdhelper.bean.BaseBean;
-import com.qqdhelper.bean.LoginBean;
-import com.qqdhelper.net.HttpHelperPost;
 import com.qqdhelper.R;
+import com.qqdhelper.bean.LoginBean;
+import com.qqdhelper.handler.QueryProuder;
+import com.qqdhelper.net.HttpHelperPost;
 import com.qqdhelper.net.z;
-
-import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -41,6 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private AutoCompleteTextView mphoneView;
     private EditText mPasswordView;
     private LoginBean mLoginbean;
+    private String phone_aa = "15677811470";
 
     private String phone;
     private String password;
@@ -114,19 +113,19 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             HashMap<String, String> param = new HashMap<>();
-
-            param.put("a", phone);
-            param.put("b", z.getRSA(this, password));
+//
+//            param.put("a", phone);
+//            param.put("b", z.getRSA(this, password));
 
             System.out.println("密码源文:" + password);
             System.out.println("密码密文:" + z.getRSA(this, password));
 
-//          phone = "13235809610";
-//          param.put("a", phone);
-//          param.put("b", z.getRSA(this, "a1234567"));
-//          System.out.println("密码:" + z.getRSA(this, "a1234567"));
+          phone = phone_aa;
+          param.put("a", phone);
+          param.put("b", z.getRSA(this, "a123456"));
+          System.out.println("密码:" + z.getRSA(this, "a1234567"));
 
-            doPost("http://4.everything4free.com/a/aa",param);
+            doPost("http://4.everything4free.com/a/aa", param);
         }
     }
 
@@ -154,6 +153,7 @@ public class LoginActivity extends AppCompatActivity {
                     System.out.println("登录返回数据："+mLoginbean.toString());
                     Toast.makeText(LoginActivity.this, mLoginbean.getHint(), Toast.LENGTH_SHORT).show();
                     BaseApplication.getApplication().saveUserInfo(mLoginbean);
+                    new Thread(new QueryProuder(LoginActivity.this, "邮费")).start();
                     System.out.println("登录getLoginInt：" + BaseApplication.getApplication().getLogin_Int(Constants.USER_B));
                     System.out.println("登录getLoginString：" + BaseApplication.getApplication().getLogin_String(Constants.USER_A));
                 }else if (mLoginbean.getCode() == 1) {

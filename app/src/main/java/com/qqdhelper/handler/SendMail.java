@@ -5,6 +5,8 @@ import com.qqdhelper.Constant;
 import java.util.Date;
 import java.util.Properties;
 
+import javax.activation.CommandMap;
+import javax.activation.MailcapCommandMap;
 import javax.mail.Authenticator;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -51,6 +53,14 @@ public class SendMail {
                 return new PasswordAuthentication(sender, password);
             }
         });
+
+        MailcapCommandMap mc = (MailcapCommandMap) CommandMap.getDefaultCommandMap();
+        mc.addMailcap("text/html;; x-java-content-handler=com.sun.mail.handlers.text_html");
+        mc.addMailcap("text/xml;; x-java-content-handler=com.sun.mail.handlers.text_xml");
+        mc.addMailcap("text/plain;; x-java-content-handler=com.sun.mail.handlers.text_plain");
+        mc.addMailcap("multipart/*;; x-java-content-handler=com.sun.mail.handlers.multipart_mixed");
+        mc.addMailcap("message/rfc822;; x-java-content- handler=com.sun.mail.handlers.message_rfc822");
+
         // 获得邮件会话对象
         MimeMessage mimeMsg = new MimeMessage(session);// 创建MIME邮件对象
         // 设置发件人地址
@@ -79,15 +89,26 @@ public class SendMail {
      * @param content     邮件内容
      * @return Boolean true 发送成功 false 发送失败
      */
-    public boolean sendMails(String mailAddress, String subject,
-                             StringBuffer content) {
+    public boolean sendMails(final String mailAddress, final String subject,
+                             final StringBuffer content) {
         if (mailAddress == null || subject == null || content == null
                 || mailAddress.trim().equals("") || subject.trim().equals("")
                 || content.equals("")) {
             return false;
         }
         try {
-            this.smtp(mailAddress, subject, content);
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        SendMail.this.smtp(mailAddress, subject, content);
+                        System.out.print("邮件成功~");
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            new Thread(runnable).start();
         } catch (Exception ex) {
             System.out.println(" Sendmail ERROR: " + ex.toString());
             return false;

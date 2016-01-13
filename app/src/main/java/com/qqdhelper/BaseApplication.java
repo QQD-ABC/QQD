@@ -18,6 +18,7 @@ public class BaseApplication extends Application {
     private int userId;
     private String userPhone;
     private String cityCode;
+    private String cityName;
 
     private SharedPreferences mSharedPreferences;//保存本地资料
 
@@ -77,8 +78,16 @@ public class BaseApplication extends Application {
         this.cityCode = cityCode;
     }
 
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
+    }
+
     public String getLogin_String(String param) {
-        return mSharedPreferences.getString(param, "");
+        return mSharedPreferences.getString(param, "1234");
     }
 
     public void setUUID(String paramString) {
