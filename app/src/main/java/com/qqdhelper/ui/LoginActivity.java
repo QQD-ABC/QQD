@@ -156,15 +156,15 @@ public class LoginActivity extends AppCompatActivity {
                     BaseApplication.getApplication().saveUserInfo(mLoginbean);
                     System.out.println("登录getLoginInt：" + BaseApplication.getApplication().getLogin_Int(Constants.USER_B));
                     System.out.println("登录getLoginString：" + BaseApplication.getApplication().getLogin_String(Constants.USER_A));
-                }else if (mLoginbean.getCode() == -100) {
-                    Toast.makeText(LoginActivity.this,mLoginbean.getHint(),Toast.LENGTH_SHORT).show();
-                } else {
+                }else if (mLoginbean.getCode() == 1) {
                     Toast.makeText(LoginActivity.this,mLoginbean.getHint(),Toast.LENGTH_SHORT).show();
                     Intent localIntent1 = new Intent(LoginActivity.this, ValidatePhoneActivity.class);
                     System.out.println("切换登录c:" + mLoginbean.getC());
                     localIntent1.putExtra("userID", Integer.parseInt(mLoginbean.getC()));
                     localIntent1.putExtra("phone", phone);
                     LoginActivity.this.startActivity(localIntent1);
+                } else {
+                    Toast.makeText(LoginActivity.this,mLoginbean.getHint(),Toast.LENGTH_SHORT).show();
                 }
             }
 
