@@ -120,6 +120,11 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    private boolean isPhoneValid(String phone) {
+        //TODO: Replace this with your own logic
+        return phone.length() == 11;
+    }
+
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
         return password.length() > 4;
