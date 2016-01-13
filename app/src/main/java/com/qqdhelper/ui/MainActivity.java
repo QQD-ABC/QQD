@@ -16,8 +16,6 @@ import com.qqdhelper.net.z;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static String cityCode;
-
     Button btn_login;
 
     @Override

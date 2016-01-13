@@ -5,12 +5,13 @@ import android.app.Application;
 /**
  * Created by sdash on 2016/1/13.
  */
-public class BaseApplication extends  Application{
+public class BaseApplication extends Application {
 
     public static BaseApplication appContext;
     private String UUID;
     private int userId;
     private String userPhone;
+    private String cityCode;
 
     public static BaseApplication getApplication() {
         return appContext;
@@ -26,6 +27,14 @@ public class BaseApplication extends  Application{
 
     public String getUserPhone() {
         return this.userPhone;
+    }
+
+    public String getCityCode() {
+        return cityCode;
+    }
+
+    public void setCityCode(String cityCode) {
+        this.cityCode = cityCode;
     }
 
     public void onCreate() {
