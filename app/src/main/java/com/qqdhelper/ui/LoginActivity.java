@@ -12,11 +12,13 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.qqdhelper.bean.BaseBean;
 import com.qqdhelper.bean.LoginBean;
 import com.qqdhelper.net.HttpHelperPost;
 import com.qqdhelper.R;
@@ -47,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
 
+    private BaseBean mBaseBean;
     private LoginBean mLoginbean;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +126,6 @@ public class LoginActivity extends AppCompatActivity {
             param.put("b", z.getRSA(this, "a1234567"));
             System.out.println("密码:" + z.getRSA(this, "a1234567"));
 
-            System.out.println("随机测试:" + z.getRSA(this, "1"));
             doPost("http://4.everything4free.com/a/aa",param);
 //            HttpHelperPost.Post(this, "http://4.everything4free.com/a/aa", param, new RequestCallBack<Object>() {
 //                @Override
@@ -153,8 +155,15 @@ public class LoginActivity extends AppCompatActivity {
 
                 Gson a=new Gson();
                 mLoginbean = a.fromJson(responseInfo.result.toString(),LoginBean.class);
-                System.out.println("登录getA："+mLoginbean.getA());
-                System.out.println("登录返回数据："+mLoginbean.toString());
+                System.out.println("code："+mLoginbean.getCode());
+                if(mLoginbean.getCode() == 0){
+                    Toast.makeText(LoginActivity.this,mLoginbean.getHint(),Toast.LENGTH_SHORT).show();
+                    System.out.println("登录getA："+mLoginbean.getA());
+                    System.out.println("登录返回数据："+mLoginbean.toString());
+                }else{
+                    mBaseBean = a.fromJson(responseInfo.result.toString(), BaseBean.class);
+                    Toast.makeText(LoginActivity.this,mBaseBean.getHint(),Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
