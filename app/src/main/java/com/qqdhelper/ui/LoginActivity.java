@@ -42,6 +42,9 @@ public class LoginActivity extends AppCompatActivity {
     private EditText mPasswordView;
     private LoginBean mLoginbean;
 
+    private String phone;
+    private String password;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,8 +86,8 @@ public class LoginActivity extends AppCompatActivity {
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String phone = mphoneView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        phone = mphoneView.getText().toString();
+        password = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -111,12 +114,19 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             HashMap<String, String> param = new HashMap<>();
-            param.put("a", "13235809610");
-            param.put("b", z.getRSA(this, "a12345678"));
-            System.out.println("密码:" + z.getRSA(this, "a1234567"));
+
+            param.put("a", phone);
+            param.put("b", z.getRSA(this, password));
+
+            System.out.println("密码源文:" + password);
+            System.out.println("密码密文:" + z.getRSA(this, password));
+
+//          phone = "13235809610";
+//          param.put("a", phone);
+//          param.put("b", z.getRSA(this, "a1234567"));
+//          System.out.println("密码:" + z.getRSA(this, "a1234567"));
 
             doPost("http://4.everything4free.com/a/aa",param);
-
         }
     }
 
@@ -153,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
                     Intent localIntent1 = new Intent(LoginActivity.this, ValidatePhoneActivity.class);
                     System.out.println("切换登录c:" + mLoginbean.getC());
                     localIntent1.putExtra("userID", Integer.parseInt(mLoginbean.getC()));
-                    localIntent1.putExtra("phone", "13235809610");
+                    localIntent1.putExtra("phone", phone);
                     LoginActivity.this.startActivity(localIntent1);
                 }
             }
