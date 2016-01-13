@@ -35,7 +35,6 @@ public class BaseApplication extends  Application{
 
     }
 
-
     public void setUUID(String paramString) {
         this.UUID = paramString;
     }

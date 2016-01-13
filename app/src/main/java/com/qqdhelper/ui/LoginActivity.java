@@ -13,9 +13,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.qqdhelper.bean.LoginBean;
 import com.qqdhelper.net.HttpHelperPost;
 import com.qqdhelper.R;
 import com.qqdhelper.net.z;
@@ -45,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     private View mProgressView;
     private View mLoginFormView;
 
+    private LoginBean mLoginbean;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,6 +150,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onSuccess(ResponseInfo responseInfo) {
                 Log.e("xx", "responseInfo" + responseInfo);
+
+                Gson a=new Gson();
+                mLoginbean = a.fromJson(responseInfo.result.toString(),LoginBean.class);
+                System.out.println("登录getA："+mLoginbean.getA());
+                System.out.println("登录返回数据："+mLoginbean.toString());
             }
 
             @Override
