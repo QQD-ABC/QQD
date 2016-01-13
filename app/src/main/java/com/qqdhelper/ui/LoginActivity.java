@@ -1,5 +1,6 @@
 package com.qqdhelper.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -144,8 +145,13 @@ public class LoginActivity extends AppCompatActivity {
                     System.out.println("登录getLoginInt：" + BaseApplication.getApplication().getLogin_Int(Constants.USER_B));
                     System.out.println("登录getLoginString：" + BaseApplication.getApplication().getLogin_String(Constants.USER_A));
                 }else{
-                    mBaseBean = a.fromJson(responseInfo.result.toString(), BaseBean.class);
+                    mBaseBean = a.fromJson(responseInfo.result.toString(), LoginBean.class);
                     Toast.makeText(LoginActivity.this,mBaseBean.getHint(),Toast.LENGTH_SHORT).show();
+                    Intent localIntent1 = new Intent(LoginActivity.this, ValidatePhoneActivity.class);
+                    System.out.println("切换登录c:" + mLoginbean.getC());
+                    localIntent1.putExtra("userID", Integer.parseInt(mLoginbean.getC()));
+                    localIntent1.putExtra("phone", "13235809610");
+                    LoginActivity.this.startActivity(localIntent1);
                 }
             }
 

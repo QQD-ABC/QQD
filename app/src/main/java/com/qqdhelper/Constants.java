@@ -7,9 +7,9 @@ package com.qqdhelper;
 public class Constants {
 
 	public static final String USERINFO = "user_info";
-	/** 用户uuid */
+	/** 用户UUid */
 	public static final String USER_A = "user_a";
-	/** 不明 应该也是唯一标识*/
+	/** 用户Userid*/
 	public static final String USER_B = "user_b";
 	/** 用户mobile*/
 	public static final String USER_C = "user_c";
