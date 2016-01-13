@@ -40,11 +40,8 @@ public class LoginActivity extends AppCompatActivity {
     // UI references.
     private AutoCompleteTextView mphoneView;
     private EditText mPasswordView;
-    private View mProgressView;
-    private View mLoginFormView;
-
-    private BaseBean mBaseBean;
     private LoginBean mLoginbean;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
             // perform the user login attempt.
             HashMap<String, String> param = new HashMap<>();
             param.put("a", "13235809610");
-            param.put("b", z.getRSA(this, "a1234567"));
+            param.put("b", z.getRSA(this, "a12345678"));
             System.out.println("密码:" + z.getRSA(this, "a1234567"));
 
             doPost("http://4.everything4free.com/a/aa",param);
@@ -144,9 +141,10 @@ public class LoginActivity extends AppCompatActivity {
                     BaseApplication.getApplication().saveUserInfo(mLoginbean);
                     System.out.println("登录getLoginInt：" + BaseApplication.getApplication().getLogin_Int(Constants.USER_B));
                     System.out.println("登录getLoginString：" + BaseApplication.getApplication().getLogin_String(Constants.USER_A));
-                }else{
-                    mBaseBean = a.fromJson(responseInfo.result.toString(), LoginBean.class);
-                    Toast.makeText(LoginActivity.this,mBaseBean.getHint(),Toast.LENGTH_SHORT).show();
+                }else if (mLoginbean.getCode() == -100) {
+                    Toast.makeText(LoginActivity.this,mLoginbean.getHint(),Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LoginActivity.this,mLoginbean.getHint(),Toast.LENGTH_SHORT).show();
                     Intent localIntent1 = new Intent(LoginActivity.this, ValidatePhoneActivity.class);
                     System.out.println("切换登录c:" + mLoginbean.getC());
                     localIntent1.putExtra("userID", Integer.parseInt(mLoginbean.getC()));

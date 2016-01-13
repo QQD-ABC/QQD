@@ -3,6 +3,25 @@ package com.qqdhelper.bean;
 import android.os.Parcel;
 
 /**
+ {
+ "code": 0,
+ "hint": "登录成功",
+ "a": "FEAD2C78*2BF9*4ACF*920C*88EAF1401E33", //UUid
+ "b": 71596, //UserID
+ "c": "13235809610", //Phone
+ "d": "1", //undefined
+ "e": "", //undefined
+ "f": "", //undefined
+ "g": "0", //undefined
+ "h": "1900-01-01",//Birthday
+ "i": "http://img.everything4free.com/", //Img_URL
+ "j": "QQD201601092034214913578", //undefined
+ "k": "db8cf51b3b", //undefined
+ "l": "", //undefined
+ "m": "", //undefined
+ "n": "待定", //undefined
+ "o": "待定" //undefined
+ }
  * Created by sdash on 2016/1/13.
  */
 public class LoginBean extends BaseBean {

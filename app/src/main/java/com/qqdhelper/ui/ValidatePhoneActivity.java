@@ -1,6 +1,5 @@
 package com.qqdhelper.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,9 +21,7 @@ import com.qqdhelper.Constants;
 import com.qqdhelper.R;
 import com.qqdhelper.bean.BaseBean;
 import com.qqdhelper.bean.LoginBean;
-import com.qqdhelper.callback.SnscityRequestCallBack;
 import com.qqdhelper.net.HttpHelperPost;
-import com.qqdhelper.net.z;
 import com.qqdhelper.widgt.CountDownButton;
 
 import java.util.HashMap;
@@ -146,6 +143,7 @@ public class ValidatePhoneActivity extends AppCompatActivity implements OnClickL
                     System.out.println("验证getLoginInt：" + BaseApplication.getApplication().getLogin_Int(Constants.USER_B));
                     System.out.println("验证getLoginString：" + BaseApplication.getApplication().getLogin_String(Constants.USER_A));
                 }else{
+                    Toast.makeText(ValidatePhoneActivity.this, mLoginbean.getHint(), Toast.LENGTH_SHORT).show();
                     System.out.println("验证返回数据：" + mLoginbean.toString());
                 }
 
