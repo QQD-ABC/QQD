@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 
 import com.qqdhelper.bean.LoginBean;
 
+import java.util.Map;
+
 /**
  * Created by sdash on 2016/1/13.
  */
@@ -29,6 +31,17 @@ public class BaseApplication extends Application {
         mSharedPreferences = appContext.getSharedPreferences(Constants.USERINFO, Context.MODE_PRIVATE);
     }
 
+    // 用于按钮存放倒计时时间
+    public static Map<String, Long> countDown_map;
+
+    public static Map<String, Long> getCountDown_map() {
+        return countDown_map;
+    }
+
+    public static void setCountDown_map(Map<String, Long> countDown_map) {
+        BaseApplication.countDown_map = countDown_map;
+    }
+
     /**
      * 登录保存数据
      */
@@ -49,10 +62,8 @@ public class BaseApplication extends Application {
         editor.putString(Constants.USER_M, mLoginData.getM());
         editor.putString(Constants.USER_N, mLoginData.getN());
         editor.putString(Constants.USER_O, mLoginData.getO());
-
         editor.commit();
     }
-
 
     public int getLogin_Int(String param) {
         return mSharedPreferences.getInt(param, 0);

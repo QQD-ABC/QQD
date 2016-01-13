@@ -36,15 +36,6 @@ import java.util.HashMap;
  */
 public class LoginActivity extends AppCompatActivity {
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-
-
     // UI references.
     private AutoCompleteTextView mphoneView;
     private EditText mPasswordView;
@@ -80,8 +71,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
     }
 
     /**
@@ -153,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, mLoginbean.getHint(), Toast.LENGTH_SHORT).show();
                     BaseApplication.getApplication().saveUserInfo(mLoginbean);
                     System.out.println("登录getLoginInt：" + BaseApplication.getApplication().getLogin_Int(Constants.USER_B));
-                    System.out.println("登录getLoginString：" + BaseApplication.getApplication().getLogin_Int(Constants.USER_A));
+                    System.out.println("登录getLoginString：" + BaseApplication.getApplication().getLogin_String(Constants.USER_A));
                 }else{
                     mBaseBean = a.fromJson(responseInfo.result.toString(), BaseBean.class);
                     Toast.makeText(LoginActivity.this,mBaseBean.getHint(),Toast.LENGTH_SHORT).show();
