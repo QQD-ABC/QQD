@@ -18,6 +18,8 @@ import com.google.gson.Gson;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.qqdhelper.BaseApplication;
+import com.qqdhelper.Constants;
 import com.qqdhelper.bean.BaseBean;
 import com.qqdhelper.bean.LoginBean;
 import com.qqdhelper.net.HttpHelperPost;
@@ -127,17 +129,7 @@ public class LoginActivity extends AppCompatActivity {
             System.out.println("密码:" + z.getRSA(this, "a1234567"));
 
             doPost("http://4.everything4free.com/a/aa",param);
-//            HttpHelperPost.Post(this, "http://4.everything4free.com/a/aa", param, new RequestCallBack<Object>() {
-//                @Override
-//                public void onSuccess(ResponseInfo<Object> responseInfo) {
-//                    Log.e("xx", "responseInfo" + responseInfo);
-//                }
-//
-//                @Override
-//                public void onFailure(HttpException error, String msg) {
-//                    Log.e("xx", msg);
-//                }
-//            }, null);
+
         }
     }
 
@@ -157,9 +149,11 @@ public class LoginActivity extends AppCompatActivity {
                 mLoginbean = a.fromJson(responseInfo.result.toString(),LoginBean.class);
                 System.out.println("code："+mLoginbean.getCode());
                 if(mLoginbean.getCode() == 0){
-                    Toast.makeText(LoginActivity.this,mLoginbean.getHint(),Toast.LENGTH_SHORT).show();
-                    System.out.println("登录getA："+mLoginbean.getA());
                     System.out.println("登录返回数据："+mLoginbean.toString());
+                    Toast.makeText(LoginActivity.this, mLoginbean.getHint(), Toast.LENGTH_SHORT).show();
+                    BaseApplication.getApplication().saveUserInfo(mLoginbean);
+                    System.out.println("登录getLoginInt：" + BaseApplication.getApplication().getLogin_Int(Constants.USER_B));
+                    System.out.println("登录getLoginString：" + BaseApplication.getApplication().getLogin_Int(Constants.USER_A));
                 }else{
                     mBaseBean = a.fromJson(responseInfo.result.toString(), BaseBean.class);
                     Toast.makeText(LoginActivity.this,mBaseBean.getHint(),Toast.LENGTH_SHORT).show();
