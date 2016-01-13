@@ -110,7 +110,12 @@ public class QueryProuder implements Runnable {
 
                         , null);
             }
-            new Thread(new QueryProuder(mContext,mKey)).start();
+            try {
+                Thread.sleep(getRodm() / 1000 * 60 * 3);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            new Thread(new QueryProuder(mContext, mKey)).start();
         }
     }
 }
