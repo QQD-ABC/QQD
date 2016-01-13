@@ -111,7 +111,7 @@ public class QueryProuder implements Runnable {
                         , null);
             }
             try {
-                Thread.sleep(getRodm() / 1000 * 60 * 3);
+                Thread.sleep(getRodm() * 60);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
