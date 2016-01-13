@@ -1,7 +1,10 @@
-package com.qqdaaaaa;
+package com.qqdhelper.net;
 
 import android.content.Context;
 import android.util.Base64;
+
+import com.qqdhelper.util.MD5Utils;
+import com.qqdhelper.util.RSAUtils;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;

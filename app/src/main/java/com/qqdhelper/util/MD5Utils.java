@@ -1,4 +1,4 @@
-package com.qqdaaaaa;
+package com.qqdhelper.util;
 
 import java.security.MessageDigest;
 public class MD5Utils {

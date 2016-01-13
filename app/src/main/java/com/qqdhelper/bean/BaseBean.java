@@ -1,4 +1,4 @@
-package com.qqdaaaaa;
+package com.qqdhelper.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;

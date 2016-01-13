@@ -1,4 +1,4 @@
-package com.qqdaaaaa;
+package com.qqdhelper.bean;
 
 public class CityData {
     public static final String city = "{" +

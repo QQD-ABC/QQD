@@ -1,4 +1,4 @@
-package com.qqdaaaaa;
+package com.qqdhelper.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+
+import com.qqdhelper.R;
+import com.qqdhelper.net.z;
 
 public class MainActivity extends AppCompatActivity {
 

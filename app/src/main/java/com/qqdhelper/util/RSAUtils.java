@@ -1,4 +1,4 @@
-package com.qqdaaaaa;
+package com.qqdhelper.util;
 
 import android.content.Context;
 import android.util.Base64;

@@ -1,4 +1,4 @@
-package com.qqdaaaaa;
+package com.qqdhelper.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +16,9 @@ import android.widget.TextView;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.qqdhelper.net.HttpHelperPost;
+import com.qqdhelper.R;
+import com.qqdhelper.net.z;
 
 import java.util.HashMap;
 

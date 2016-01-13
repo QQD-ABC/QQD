@@ -1,4 +1,4 @@
-package com.qqdaaaaa;
+package com.qqdhelper.net;
 
 import android.content.Context;
 import android.util.Log;

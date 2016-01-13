@@ -1,4 +1,4 @@
-package com.qqdaaaaa;
+package com.qqdhelper;
 
 import android.content.Context;
 import android.util.Log;
@@ -6,6 +6,9 @@ import android.util.Log;
 import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.qqdhelper.bean.CityData;
+import com.qqdhelper.net.HttpHelperPost;
+import com.qqdhelper.ui.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
