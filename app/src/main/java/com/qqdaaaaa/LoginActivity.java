@@ -25,10 +25,20 @@ import java.util.HashMap;
  */
 public class LoginActivity extends AppCompatActivity {
 
+    /**
+     * A dummy authentication store containing known user names and passwords.
+     * TODO: remove after connecting to a real authentication system.
+     */
+    private static final String[] DUMMY_CREDENTIALS = new String[]{
+            "foo@example.com:hello", "bar@example.com:world"
+    };
+
+
     // UI references.
     private AutoCompleteTextView mphoneView;
     private EditText mPasswordView;
-
+    private View mProgressView;
+    private View mLoginFormView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +66,9 @@ public class LoginActivity extends AppCompatActivity {
                 attemptLogin();
             }
         });
+
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
     }
 
     /**
@@ -98,17 +111,12 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             HashMap<String, String> param = new HashMap<>();
-//            param.put("a", phone);
-//            param.put("b", z.getRSA(this, password));
-//            System.out.println("手机:" + phone);
-//            System.out.println("密码:" + z.getRSA(this, password));
-
             param.put("a", "13235809610");
-            param.put("b", z.getRSA(this, z.getRSA(this, "a1234567")));
-            System.out.println("手机:" + "13235809610");
+            param.put("b", z.getRSA(this, "a1234567"));
             System.out.println("密码:" + z.getRSA(this, "a1234567"));
 
-            doPost("http://4.everything4free.com/a/aa", param);
+            System.out.println("随机测试:" + z.getRSA(this, "1"));
+            doPost("http://4.everything4free.com/a/aa",param);
 //            HttpHelperPost.Post(this, "http://4.everything4free.com/a/aa", param, new RequestCallBack<Object>() {
 //                @Override
 //                public void onSuccess(ResponseInfo<Object> responseInfo) {
@@ -128,7 +136,8 @@ public class LoginActivity extends AppCompatActivity {
         return password.length() > 4;
     }
 
-    protected <T> void doPost(String paramString, HashMap<String, String> paramHashMap) {
+    protected <T> void doPost(String paramString, HashMap<String, String> paramHashMap)
+    {
         HttpHelperPost.Post(LoginActivity.this, paramString, paramHashMap, new RequestCallBack() {
             @Override
             public void onSuccess(ResponseInfo responseInfo) {
