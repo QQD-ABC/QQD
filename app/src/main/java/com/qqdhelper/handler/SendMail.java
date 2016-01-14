@@ -1,5 +1,8 @@
 package com.qqdhelper.handler;
 
+import android.util.Log;
+
+import com.qqdhelper.BaseApplication;
 import com.qqdhelper.Constant;
 
 import java.util.Date;
@@ -102,7 +105,11 @@ public class SendMail {
                 public void run() {
                     try {
                         SendMail.this.smtp(mailAddress, subject, content);
-                        System.out.println("发送邮件成功~");
+                        synchronized (SendMail.this) {
+                            System.out.println("发送邮件成功~");
+                            BaseApplication.meilCount += 1;
+                            Log.e("xx", "当前有件数量:" + BaseApplication.meilCount);
+                        }
                     } catch (MessagingException e) {
                         e.printStackTrace();
                     }

@@ -4,7 +4,11 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
+import com.qqdhelper.bean.CityData;
 import com.qqdhelper.bean.LoginBean;
+import com.qqdhelper.bean.prouder.ProuderItem;
+import com.qqdhelper.bean.prouder.ProuderList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +20,7 @@ import java.util.Map;
 public class BaseApplication extends Application {
 
     public static BaseApplication appContext;
+    public static int meilCount = 0;
     private String UUID;
     private int userId;
     private String userPhone;
@@ -23,6 +28,7 @@ public class BaseApplication extends Application {
     private String cityName;
 
     private SharedPreferences mSharedPreferences;//保存本地资料
+    private List<ProuderItem> citys;
 
     public static BaseApplication getApplication() {
         return appContext;
@@ -66,6 +72,17 @@ public class BaseApplication extends Application {
             this.keys.add("ipad");
         }
     }
+
+    public List<ProuderItem> getCityData() {
+        if (citys == null) {
+            Gson a = new Gson();
+            ProuderList cityList = a.fromJson(CityData.city, ProuderList.class);
+            citys = cityList.getA();
+
+        }
+        return citys;
+    }
+
 
     /**
      * 登录保存数据
