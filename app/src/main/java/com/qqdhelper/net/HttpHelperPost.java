@@ -58,7 +58,7 @@ public class HttpHelperPost {
         localHashMap.put("zu", "Xiaomi MI 4LTE");//机器型号
         localHashMap.put("zt", "4.4.4");//系统版本
         localHashMap.put("zs", "2");//不明==========
-        localHashMap.put("zr", "1.0.55");//不明==========
+        localHashMap.put("zr", "1.0.55");//QQD 程序版本==========
         localHashMap.put("zq", BaseApplication.getApplication().getLogin_String(Constants.USER_A));//用户id  默认1234
         final String city = BaseApplication.getApplication().getCityCode();
         localHashMap.put("zp", TextUtils.isEmpty(city) ? "10000" : city);//城市 默认10000
