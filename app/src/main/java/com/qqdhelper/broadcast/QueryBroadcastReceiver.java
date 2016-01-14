@@ -28,6 +28,9 @@ public class QueryBroadcastReceiver extends BroadcastReceiver {
 
         System.out.println("进入广播，开始准备查询......");
         BaseApplication.getApplication().initQueryKeys(keys);//初始化查询keys
+//        if () {
+//        此处每次开启前需要关闭正在运行的查询线程
+//        }
         new Thread(new QueryProduct(context, BaseApplication.getApplication().keys)).start();
         System.out.println("查询进程已启动，正在查询中......");
     }

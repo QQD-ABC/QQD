@@ -59,12 +59,9 @@ public class BaseApplication extends Application {
      * */
     public void initQueryKeys(List<String> query_keys) {
         if (query_keys != null) {
+              this.keys.removeAll(keys);
               this.keys=query_keys;
         } else {
-            //keys.add("ipad");
-            //keys.add("iphone");
-            //keys.add("苹果");
-            //keys.add("mac");
             this.keys.add("Xbox");
             this.keys.add("psp");
             this.keys.add("mac");
