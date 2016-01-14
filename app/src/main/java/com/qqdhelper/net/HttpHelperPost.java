@@ -10,6 +10,7 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.qqdhelper.BaseApplication;
 import com.qqdhelper.Constants;
+import com.qqdhelper.util.RandomIp;
 
 import java.io.File;
 import java.util.Date;
@@ -53,7 +54,7 @@ public class HttpHelperPost {
         localHashMap.put("zy", "zh");//运行语言
         localHashMap.put("zx", str1);//当前时间
         localHashMap.put("zw", "868568021407369");//机器imei
-        localHashMap.put("zv", "113.117.25.103");//当前网络ip   我们随机ip
+        localHashMap.put("zv", RandomIp.getRandomIp());//当前网络ip   我们随机ip
         localHashMap.put("zu", "Xiaomi MI 4LTE");//机器型号
         localHashMap.put("zt", "4.4.4");//系统版本
         localHashMap.put("zs", "2");//不明==========
