@@ -33,6 +33,15 @@
             android:name="com.qqdhelper.ui.ValidatePhoneActivity"
             android:label="@string/title_activity_validatephone" />
 
+        <!-- 为广播接收组件注册 -->
+        <receiver android:name=".broadcast.QueryBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.com.qqdhelper.broadcastreceiver.action.QUERYACTION" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </receiver>
     </application>
 
 </manifest>

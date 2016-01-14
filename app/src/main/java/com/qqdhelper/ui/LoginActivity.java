@@ -2,6 +2,7 @@ package com.qqdhelper.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.qqdhelper.BaseApplication;
+import com.qqdhelper.Constant;
 import com.qqdhelper.Constants;
 import com.qqdhelper.R;
 import com.qqdhelper.bean.LoginBean;
@@ -41,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     private AutoCompleteTextView mphoneView;
     private EditText mPasswordView;
     private LoginBean mLoginbean;
-    private String phone_aa = "15677811470";
+    private String phone_aa = "13235809610";
 
     private String phone;
     private String password;
@@ -123,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
 
           phone = phone_aa;
           param.put("a", phone);
-          param.put("b", z.getRSA(this, "a123456"));
+          param.put("b", z.getRSA(this, "a1234567"));
           System.out.println("密码:" + z.getRSA(this, "a1234567"));
 
             doPost("http://4.everything4free.com/a/aa", param);
@@ -155,12 +157,20 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, mLoginbean.getHint(), Toast.LENGTH_SHORT).show();
                     BaseApplication.getApplication().saveUserInfo(mLoginbean);
 
-                    List<String> keys = new ArrayList<>();
-                    keys.add("ipad");
-                    keys.add("iphone");
-                    keys.add("苹果");
-                    keys.add("mac");
-                    new Thread(new QueryProuder(LoginActivity.this, keys)).start();
+                    ArrayList<String> keys = new ArrayList<>();
+                    keys.add("邮费");
+
+                    Intent intent = new Intent();
+                    /*  设置Intent对象的action属性  */
+                    intent.setAction(Constants.QUERYACTION);
+                    /* 为Intent对象添加附加信息 */
+                    intent.putExtra("msg", "发送登录广播测试成功.....");
+
+                    /* 为Intent对象添加附加信息 */
+                    intent.putStringArrayListExtra(Constants.INTENT_query_list, keys);//如果传递自定义list，按照自定义查询，如果不传递，按默认值查询
+
+                    /* 发布广播 */
+                    sendBroadcast(intent);
 
                     System.out.println("登录getLoginInt：" + BaseApplication.getApplication().getLogin_Int(Constants.USER_B));
                     System.out.println("登录getLoginString：" + BaseApplication.getApplication().getLogin_String(Constants.USER_A));

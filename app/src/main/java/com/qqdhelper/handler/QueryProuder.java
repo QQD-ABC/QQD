@@ -97,25 +97,10 @@ public class QueryProuder implements Runnable {
                                         if (prouderItem.getF() > 0) {
                                             SendMail sm = new SendMail();
                                             for (String receicveer : Constant.receiveer) {
-                                                boolean city_Flag;
-                                                if (prouderItem.getK().toString().indexOf(prouderItem.getK().toString().valueOf('市')) == -1) {
-                                                    //字符串中不存在 市
-                                                    if (prouderItem.getK().toString().indexOf(prouderItem.getK().toString().valueOf('县')) != -1 || prouderItem.getK().toString().indexOf(prouderItem.getK().toString().valueOf('区')) != -1) {
-                                                        city_Flag = true;
-                                                    } else {
-                                                        city_Flag = false;
-                                                    }
-                                                } else {
-                                                    city_Flag = false;
-                                                }
-
-                                                if (city_Flag) {
-                                                    sm.sendMails(receicveer, "Teemo提醒您：" + cityName + prouderItem.getK() + "的 " + key + " 有货啦！！！", new StringBuffer(
-                                                            "赶快打开QQD，去 <U>" + cityName + prouderItem.getK() + "</U> 兑换 <U>" + key + "</U> FV："+ prouderItem.getB() +"  当前数量：<U>" + prouderItem.getF() + "</U>  数量有限，先到先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
-                                                } else {
-                                                    sm.sendMails(receicveer, "Teemo提醒您：" + prouderItem.getK() + "的 " + key + " 有货啦！！！", new StringBuffer(
-                                                            "赶快打开QQD，去 <U>" + prouderItem.getK() + "</U> 兑换 <U>" + key + "</U> FV："+ prouderItem.getB() +"  当前数量：<U>" + prouderItem.getF() + "</U>  数量有限，先到先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
-                                                }
+                                                System.out.println("邮件发送程序开始执行......");
+                                                sm.sendMails(receicveer, "Teemo提醒您：" + cityName + " 的 "+ prouderItem.getK() + " 的 " + key + " 有货啦！！！", new StringBuffer(
+                                                        "赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>"+ prouderItem.getK() + "</U> 兑换 <U>" + key + "</U>， FV：<U>"+ prouderItem.getB() +"</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
+                                                System.out.println("邮件发送程序执行完！");
                                             }
                                         }
                                     }

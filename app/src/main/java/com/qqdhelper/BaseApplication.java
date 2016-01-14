@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 
 import com.qqdhelper.bean.LoginBean;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,6 +43,28 @@ public class BaseApplication extends Application {
 
     public static void setCountDown_map(Map<String, Long> countDown_map) {
         BaseApplication.countDown_map = countDown_map;
+    }
+
+    public List<String> keys = new ArrayList<>();
+
+    /**
+     * 初始化 查询键
+     * 如果传递值为null，读取默认值
+     * */
+    public void initQueryKeys(List<String> query_keys) {
+        if (query_keys != null) {
+              this.keys=query_keys;
+        } else {
+            //keys.add("ipad");
+            //keys.add("iphone");
+            //keys.add("苹果");
+            //keys.add("mac");
+            this.keys.add("Xbox");
+            this.keys.add("psp");
+            this.keys.add("mac");
+            this.keys.add("iphone");
+            this.keys.add("ipad");
+        }
     }
 
     /**

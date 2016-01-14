@@ -1,5 +1,8 @@
 package com.qqdhelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 系统常量
  * @author sdash
@@ -39,4 +42,9 @@ public class Constants {
 	public static final String USER_O = "user_o";
 	/** 国家代码 */
 	public static final String USER_P = "user_p";
+
+	/** 查询商品 广播传递标记*/
+	public static final String INTENT_query_list = "INTENT_query_list";
+	/** 查询商品 广播地址*/
+	public static final String QUERYACTION = "android.com.qqdhelper.broadcastreceiver.action.QUERYACTION";
 }

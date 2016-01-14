@@ -145,15 +145,13 @@ public class ValidatePhoneActivity extends AppCompatActivity implements OnClickL
                     Toast.makeText(ValidatePhoneActivity.this, "验证成功", Toast.LENGTH_SHORT).show();
                     BaseApplication.getApplication().saveUserInfo(mLoginbean);
 
-
-                    List<String> keys = new ArrayList<>();
-                    keys.add("ipad");
-                    keys.add("iphone");
-                    keys.add("苹果");
-                    keys.add("mac");
-                    new Thread(new QueryProuder(ValidatePhoneActivity.this, keys)).start();
-
-
+                    Intent intent = new Intent();
+                    /*  设置Intent对象的action属性  */
+                    intent.setAction(Constants.QUERYACTION);
+                    /* 为Intent对象添加附加信息 */
+                    intent.putExtra("msg", "发送验证广播测试成功.....");
+                    /* 发布广播 */
+                    sendBroadcast(intent);
 
                     System.out.println("验证getLoginInt：" + BaseApplication.getApplication().getLogin_Int(Constants.USER_B));
                     System.out.println("验证getLoginString：" + BaseApplication.getApplication().getLogin_String(Constants.USER_A));
