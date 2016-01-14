@@ -1,6 +1,7 @@
 package com.qqdhelper.net;
 
 import android.content.Context;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -10,6 +11,7 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.lidroid.xutils.http.client.HttpRequest;
 import com.qqdhelper.BaseApplication;
 import com.qqdhelper.Constants;
+import com.qqdhelper.util.PhoneUitls;
 import com.qqdhelper.util.RandomIp;
 
 import java.io.File;
@@ -38,36 +40,29 @@ public class HttpHelperPost {
 
     public static HashMap<String, String> getDefaultParams(Context paramContext) {
         String str1 = (new Date().getTime()) + "";
-//        String str2 = SharedPreferencesManager.getInstance(paramContext).getString("mToken");
-//        if (!(TextUtils.isEmpty(str2)))
-//            ConstantObj.getuuid = str2;
-//        while (true) {
-//            String str3 = PhoneUitls.GetIMEI(paramContext);
-//            if (TextUtils.isEmpty(str3))
-//                str3 = "1234567890";
-//            BaseApplication localBaseApplication = (BaseApplication) paramContext.getApplicationContext();
-//            String str4 = localBaseApplication.getUserId() + "";
-//            if (TextUtils.isEmpty(str4))
-//                str4 = "0";
-//            ConstantObj.language = getLocaleLanguage(paramContext);
+
+        String str3 = PhoneUitls.GetIMEI(paramContext);
+        if (TextUtils.isEmpty(str3)) {
+            str3 = "1234567890";
+        }
+
         HashMap localHashMap = new HashMap();
-        localHashMap.put("zy", "zh");//运行语言
+        localHashMap.put("zy", getLocaleLanguage(paramContext));//运行语言
         localHashMap.put("zx", str1);//当前时间
-        localHashMap.put("zw", "868568021407369");//机器imei
+        localHashMap.put("zw", str3);//机器imei
         localHashMap.put("zv", RandomIp.getRandomIp());//当前网络ip   我们随机ip
-        localHashMap.put("zu", "Xiaomi MI 4LTE");//机器型号
-        localHashMap.put("zt", "4.4.4");//系统版本
+        localHashMap.put("zu", Build.MANUFACTURER + " " + Build.MODEL);//机器型号
+        localHashMap.put("zt", Build.VERSION.RELEASE);//系统版本
         localHashMap.put("zs", "2");//不明==========
-        localHashMap.put("zr", "1.0.55");//QQD 程序版本==========
-        localHashMap.put("zq", BaseApplication.getApplication().getLogin_String(Constants.USER_A));//用户id  默认1234
+        localHashMap.put("zr", "1.055");//QQD 程序版本==========
+        final String uuid = BaseApplication.getApplication().getLogin_String(Constants.USER_A);
+        localHashMap.put("zq", TextUtils.isEmpty(uuid) ? "1234" : uuid);//uuid  默认1234
         final String city = BaseApplication.getApplication().getCityCode();
         localHashMap.put("zp", TextUtils.isEmpty(city) ? "10000" : city);//城市 默认10000
         localHashMap.put("zo", "86");//国际区号 默认中国86
-        localHashMap.put("zn", "0");//不明==========
+        final String userid = BaseApplication.getApplication().getLogin_Int(Constants.USER_B) + "";
+        localHashMap.put("zn", TextUtils.isEmpty(userid) ? "0" : userid);//UserId 默认0
         return localHashMap;
-//            ConstantObj.getuuid = "1234";
-//    }
-
     }
 
     public static String getLocaleLanguage(Context paramContext) {
