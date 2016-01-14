@@ -21,13 +21,10 @@ import com.qqdhelper.Constants;
 import com.qqdhelper.R;
 import com.qqdhelper.bean.BaseBean;
 import com.qqdhelper.bean.LoginBean;
-import com.qqdhelper.handler.QueryProuder;
 import com.qqdhelper.net.HttpHelperPost;
 import com.qqdhelper.widgt.CountDownButton;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * 更换手机登录的验证

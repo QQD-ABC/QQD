@@ -6,10 +6,8 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.qqdhelper.BaseApplication;
-import com.qqdhelper.handler.QueryProuder;
-import com.qqdhelper.ui.LoginActivity;
+import com.qqdhelper.handler.QueryProduct;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +27,7 @@ public class QueryBroadcastReceiver extends BroadcastReceiver {
 
         System.out.println("进入广播，开始准备查询......");
         BaseApplication.getApplication().initQueryKeys(keys);//初始化查询keys
-        new Thread(new QueryProuder(context, BaseApplication.getApplication().keys)).start();
+        new Thread(new QueryProduct(context, BaseApplication.getApplication().keys)).start();
         System.out.println("查询进程已启动，正在查询中......");
     }
 }

@@ -2,7 +2,6 @@ package com.qqdhelper.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -21,17 +20,14 @@ import com.lidroid.xutils.exception.HttpException;
 import com.lidroid.xutils.http.ResponseInfo;
 import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.qqdhelper.BaseApplication;
-import com.qqdhelper.Constant;
 import com.qqdhelper.Constants;
 import com.qqdhelper.R;
 import com.qqdhelper.bean.LoginBean;
-import com.qqdhelper.handler.QueryProuder;
 import com.qqdhelper.net.HttpHelperPost;
 import com.qqdhelper.net.z;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 
 /**
@@ -43,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private AutoCompleteTextView mphoneView;
     private EditText mPasswordView;
     private LoginBean mLoginbean;
-    private String phone_aa = "13235809610";
+    private String phone_aa = "15677811470";
 
     private String phone;
     private String password;
@@ -123,10 +119,10 @@ public class LoginActivity extends AppCompatActivity {
 //            System.out.println("密码源文:" + password);
 //            System.out.println("密码密文:" + z.getRSA(this, password));
 
-          phone = phone_aa;
-          param.put("a", phone);
-          param.put("b", z.getRSA(this, "a1234567"));
-          System.out.println("密码:" + z.getRSA(this, "a1234567"));
+            phone = phone_aa;
+            param.put("a", phone);
+            param.put("b", z.getRSA(this, "a123456"));
+            System.out.println("密码:" + z.getRSA(this, "a1234567"));
 
             doPost("http://4.everything4free.com/a/aa", param);
         }

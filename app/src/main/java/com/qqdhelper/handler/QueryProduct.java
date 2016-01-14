@@ -11,14 +11,9 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.qqdhelper.BaseApplication;
 import com.qqdhelper.Constant;
 import com.qqdhelper.Constants;
-import com.qqdhelper.bean.CityData;
 import com.qqdhelper.bean.prouder.ProuderItem;
 import com.qqdhelper.bean.prouder.ProuderList;
 import com.qqdhelper.net.HttpHelperPost;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -26,16 +21,29 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class QueryProuder implements Runnable {
+public class QueryProduct implements Runnable {
     private final List<String> mKeys = new ArrayList<>();
+    List<ProuderItem> mCitys = new ArrayList<>();
     private String current_Time;
     Context mContext;
 
-    public QueryProuder(Context context, List<String> key) {
+    public QueryProduct(Context context, List<String> key) {
         mContext = context;
         mKeys.clear();
         if (key != null) {
             mKeys.addAll(key);
+        }
+    }
+
+    public QueryProduct(Context context, List<ProuderItem> citys, List<String> key) {
+        mContext = context;
+        mKeys.clear();
+        if (key != null) {
+            mKeys.addAll(key);
+        }
+        mCitys.clear();
+        if (citys != null) {
+            mCitys.addAll(citys);
         }
     }
 
@@ -47,22 +55,12 @@ public class QueryProuder implements Runnable {
 
     @Override
     public void run() {
-        JSONArray dataJson = null;
-        try {
-            JSONObject jsonObject = new JSONObject(CityData.city);
-            dataJson = (JSONArray) jsonObject.get("a");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        if (dataJson != null) {
-            for (int i = 0, j = dataJson.length(); i < j; i++) {
-                try {
-                    BaseApplication.getApplication().setCityCode(dataJson.getJSONObject(i).getString("a"));
-                    BaseApplication.getApplication().setCityName(dataJson.getJSONObject(i).getString("b"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                for (final String key : mKeys) {
+        List<ProuderItem> citys = mCitys.isEmpty() ? BaseApplication.getApplication().getCityData() : mCitys;
+        if (citys != null) {
+            for (int i = 0, j = citys.size(); i < j; i++) {//城市==========
+                BaseApplication.getApplication().setCityCode(citys.get(i).getA());
+                BaseApplication.getApplication().setCityName(citys.get(i).getB());
+                for (final String key : mKeys) {//关键字===========
                     try {
                         Thread.sleep(getRodm());
                     } catch (InterruptedException e) {
@@ -81,38 +79,38 @@ public class QueryProuder implements Runnable {
                     param.put("f", key);
                     final String city = BaseApplication.getApplication().getCityCode();
                     final String cityName = BaseApplication.getApplication().getCityName();
+                    final ProuderItem cityItem = new ProuderItem();
+                    cityItem.setA(city);
+                    cityItem.setB(cityName);
                     Log.e("xx", "开始查询:" + cityName + "的" + key);
                     HttpHelperPost.Post(mContext, "http://4.everything4free.com/c/ae", param, new RequestCallBack<Object>() {
                         @Override
                         public void onSuccess(ResponseInfo<Object> responseInfo) {
-//                            Log.e("xx", city + "responseInfo" + responseInfo);
                             Gson a = new Gson();
                             ProuderList prouderList = a.fromJson(responseInfo.result.toString(), ProuderList.class);
                             Log.e("xx", "查询结果:" + cityName + "的" + key + "===" + responseInfo.result.toString());
                             if (prouderList.getCode() == 0) {
-//                          Toast.makeText(mContext, prouderList.getHint(), Toast.LENGTH_SHORT).show();
                                 List<ProuderItem> list = prouderList.getA();
                                 if (list != null) {
                                     for (ProuderItem prouderItem : list) {
+                                        if (!mCitys.contains(cityItem)) {
+                                            mCitys.add(cityItem);
+                                        }
                                         if (prouderItem.getF() > 0) {
                                             SendMail sm = new SendMail();
                                             for (String receicveer : Constant.receiveer) {
                                                 System.out.println("邮件发送程序开始执行......");
-                                                sm.sendMails(receicveer, "Teemo提醒您：" + cityName + " 的 "+ prouderItem.getK() + " 的 " + key + " 有货啦！！！", new StringBuffer(
-                                                        "赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>"+ prouderItem.getK() + "</U> 兑换 <U>" + key + "</U>， FV：<U>"+ prouderItem.getB() +"</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
+                                                sm.sendMails(receicveer, "Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + key + " 有货啦！！！", new StringBuffer(
+                                                        "赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> 兑换 <U>" + key + "</U>， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
                                                 System.out.println("邮件发送程序执行完！");
                                             }
                                         }
                                     }
                                 }
                             } else {
-//                            mBaseBean = a.fromJson(responseInfo.result.toString(), BaseBean.class);
+                                Log.e("xx", "查询结果:" + prouderList.getHint());
                                 Toast.makeText(mContext, prouderList.getHint(), Toast.LENGTH_SHORT).show();
-//                                try {
-//                                    QueryProuder.this.wait();
-//                                } catch (InterruptedException e) {
-//                                    e.printStackTrace();
-//                                }
+                                return;
                             }
                         }
 
@@ -120,9 +118,7 @@ public class QueryProuder implements Runnable {
                         public void onFailure(HttpException error, String msg) {
                             Log.e("xx", msg);
                         }
-                    }
-
-                            , null);
+                    }, null);
                 }
             }
             try {
@@ -130,8 +126,8 @@ public class QueryProuder implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if (mKeys != null && !mKeys.isEmpty()) {
-                new Thread(new QueryProuder(mContext, mKeys)).start();
+            if (mKeys != null && !mKeys.isEmpty()) {//run==========
+                new Thread(mCitys.isEmpty() ? new QueryProduct(mContext, mKeys) : new QueryProduct(mContext, mCitys, mKeys)).start();
             }
         }
     }
