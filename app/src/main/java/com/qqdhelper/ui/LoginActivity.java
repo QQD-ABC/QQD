@@ -157,8 +157,8 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, mLoginbean.getHint(), Toast.LENGTH_SHORT).show();
                     BaseApplication.getApplication().saveUserInfo(mLoginbean);
 
-                    ArrayList<String> keys = new ArrayList<>();
-                    keys.add("邮费");
+//                    ArrayList<String> keys = new ArrayList<>();
+//                    keys.add("邮费");
 
                     Intent intent = new Intent();
                     /*  设置Intent对象的action属性  */
@@ -166,8 +166,8 @@ public class LoginActivity extends AppCompatActivity {
                     /* 为Intent对象添加附加信息 */
                     intent.putExtra("msg", "发送登录广播测试成功.....");
 
-                    /* 为Intent对象添加附加信息 */
-                    intent.putStringArrayListExtra(Constants.INTENT_query_list, keys);//如果传递自定义list，按照自定义查询，如果不传递，按默认值查询
+//                    /* 为Intent对象添加附加信息 */
+//                    intent.putStringArrayListExtra(Constants.INTENT_query_list, keys);
 
                     /* 发布广播 */
                     sendBroadcast(intent);
