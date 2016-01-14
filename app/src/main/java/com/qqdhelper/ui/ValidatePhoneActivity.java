@@ -25,7 +25,9 @@ import com.qqdhelper.handler.QueryProuder;
 import com.qqdhelper.net.HttpHelperPost;
 import com.qqdhelper.widgt.CountDownButton;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * 更换手机登录的验证
@@ -88,16 +90,17 @@ public class ValidatePhoneActivity extends AppCompatActivity implements OnClickL
             case R.id.btn_sure:
                 if (!TextUtils.isEmpty(etPhoneCode.getText().toString())) {
                     HashMap<String, String> param = new HashMap<>();
-                    param.put("a", this.userId+"");
+                    param.put("a", this.userId + "");
                     param.put("b", etPhoneCode.getText().toString());
 
                     doValidate("http://4.everything4free.com/a/ao", param);
                 } else {
-                    Toast.makeText(this,"验证码不能为空",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "验证码不能为空", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
     }
+
     private void getIdentification() {
         String str = "http://4.everything4free.com/a/ah";
         HashMap localHashMap = new HashMap();
@@ -134,17 +137,27 @@ public class ValidatePhoneActivity extends AppCompatActivity implements OnClickL
             public void onSuccess(ResponseInfo responseInfo) {
                 Log.e("xx", "responseInfo" + responseInfo);
 
-                Gson a=new Gson();
-                mLoginbean = a.fromJson(responseInfo.result.toString(),LoginBean.class);
+                Gson a = new Gson();
+                mLoginbean = a.fromJson(responseInfo.result.toString(), LoginBean.class);
                 System.out.println("code：" + mLoginbean.getCode());
-                if(mLoginbean.getCode() == 0){
-                    System.out.println("验证返回数据："+mLoginbean.toString());
+                if (mLoginbean.getCode() == 0) {
+                    System.out.println("验证返回数据：" + mLoginbean.toString());
                     Toast.makeText(ValidatePhoneActivity.this, "验证成功", Toast.LENGTH_SHORT).show();
                     BaseApplication.getApplication().saveUserInfo(mLoginbean);
-                    new Thread(new QueryProuder(ValidatePhoneActivity.this, "邮费")).start();
+
+
+                    List<String> keys = new ArrayList<>();
+                    keys.add("ipad");
+                    keys.add("iphone");
+                    keys.add("苹果");
+                    keys.add("mac");
+                    new Thread(new QueryProuder(ValidatePhoneActivity.this, keys)).start();
+
+
+
                     System.out.println("验证getLoginInt：" + BaseApplication.getApplication().getLogin_Int(Constants.USER_B));
                     System.out.println("验证getLoginString：" + BaseApplication.getApplication().getLogin_String(Constants.USER_A));
-                }else{
+                } else {
                     Toast.makeText(ValidatePhoneActivity.this, mLoginbean.getHint(), Toast.LENGTH_SHORT).show();
                     System.out.println("验证返回数据：" + mLoginbean.toString());
                 }

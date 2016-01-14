@@ -27,7 +27,9 @@ import com.qqdhelper.handler.QueryProuder;
 import com.qqdhelper.net.HttpHelperPost;
 import com.qqdhelper.net.z;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -39,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     private AutoCompleteTextView mphoneView;
     private EditText mPasswordView;
     private LoginBean mLoginbean;
-    private String phone_aa = "13175076341";
+    private String phone_aa = "15677811470";
 
     private String phone;
     private String password;
@@ -121,7 +123,7 @@ public class LoginActivity extends AppCompatActivity {
 
           phone = phone_aa;
           param.put("a", phone);
-          param.put("b", z.getRSA(this, "a1234567"));
+          param.put("b", z.getRSA(this, "a123456"));
           System.out.println("密码:" + z.getRSA(this, "a1234567"));
 
             doPost("http://4.everything4free.com/a/aa", param);
@@ -149,10 +151,17 @@ public class LoginActivity extends AppCompatActivity {
                 mLoginbean = a.fromJson(responseInfo.result.toString(),LoginBean.class);
                 System.out.println("code："+mLoginbean.getCode());
                 if(mLoginbean.getCode() == 0){
-                    System.out.println("登录返回数据："+mLoginbean.toString());
+                    System.out.println("登录返回数据：" + mLoginbean.toString());
                     Toast.makeText(LoginActivity.this, mLoginbean.getHint(), Toast.LENGTH_SHORT).show();
                     BaseApplication.getApplication().saveUserInfo(mLoginbean);
-                    new Thread(new QueryProuder(LoginActivity.this, "邮费")).start();
+
+                    List<String> keys = new ArrayList<>();
+                    keys.add("ipad");
+                    keys.add("iphone");
+                    keys.add("苹果");
+                    keys.add("mac");
+                    new Thread(new QueryProuder(LoginActivity.this, keys)).start();
+
                     System.out.println("登录getLoginInt：" + BaseApplication.getApplication().getLogin_Int(Constants.USER_B));
                     System.out.println("登录getLoginString：" + BaseApplication.getApplication().getLogin_String(Constants.USER_A));
                 }else if (mLoginbean.getCode() == 1) {

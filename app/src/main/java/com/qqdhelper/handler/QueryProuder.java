@@ -21,18 +21,22 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 public class QueryProuder implements Runnable {
-    private final String mKey;
+    private final List<String> mKeys = new ArrayList<>();
     private String current_Time;
     Context mContext;
 
-    public QueryProuder(Context context, String key) {
+    public QueryProuder(Context context, List<String> key) {
         mContext = context;
-        mKey = key;
+        mKeys.clear();
+        if (key != null) {
+            mKeys.addAll(key);
+        }
     }
 
     public int getRodm() {
@@ -53,91 +57,97 @@ public class QueryProuder implements Runnable {
         if (dataJson != null) {
             for (int i = 0, j = dataJson.length(); i < j; i++) {
                 try {
-                    Thread.sleep(getRodm());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                try {
                     BaseApplication.getApplication().setCityCode(dataJson.getJSONObject(i).getString("a"));
                     BaseApplication.getApplication().setCityName(dataJson.getJSONObject(i).getString("b"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                Date d = new Date();
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//年-月-日 时:分:秒:毫秒
-                current_Time = sdf.format(d).toString();
-                System.out.println("当前时间："+sdf.format(d));
-                HashMap<String, String> param = new HashMap<>();
-                //param.put("a", "71901");
-                param.put("a", BaseApplication.getApplication().getLogin_Int(Constants.USER_B)+"");
-                param.put("c", "1");
-                param.put("d", "15");
-                param.put("e", "0");
-                param.put("f", mKey);
-                final String city = BaseApplication.getApplication().getCityCode();
-                final String cityName = BaseApplication.getApplication().getCityName();
-                HttpHelperPost.Post(mContext, "http://4.everything4free.com/c/ae", param, new RequestCallBack<Object>() {
-                    @Override
-                    public void onSuccess(ResponseInfo<Object> responseInfo) {
-                        Log.e("xx", city + "responseInfo" + responseInfo);
-                        Gson a = new Gson();
-                        ProuderList prouderList = a.fromJson(responseInfo.result.toString(), ProuderList.class);
-                        if (prouderList.getCode() == 0) {
+                for (final String key : mKeys) {
+                    try {
+                        Thread.sleep(getRodm());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Date d = new Date();
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//年-月-日 时:分:秒:毫秒
+                    current_Time = sdf.format(d).toString();
+                    System.out.println("当前时间：" + sdf.format(d));
+                    HashMap<String, String> param = new HashMap<>();
+                    //param.put("a", "71901");
+                    param.put("a", BaseApplication.getApplication().getLogin_Int(Constants.USER_B) + "");
+                    param.put("c", "1");
+                    param.put("d", "15");
+                    param.put("e", "0");
+                    param.put("f", key);
+                    final String city = BaseApplication.getApplication().getCityCode();
+                    final String cityName = BaseApplication.getApplication().getCityName();
+                    Log.e("xx", "开始查询:" + cityName + "的" + key);
+                    HttpHelperPost.Post(mContext, "http://4.everything4free.com/c/ae", param, new RequestCallBack<Object>() {
+                        @Override
+                        public void onSuccess(ResponseInfo<Object> responseInfo) {
+//                            Log.e("xx", city + "responseInfo" + responseInfo);
+                            Gson a = new Gson();
+                            ProuderList prouderList = a.fromJson(responseInfo.result.toString(), ProuderList.class);
+                            Log.e("xx", "查询结果:" + cityName + "的" + key + "===" + responseInfo.result.toString());
+                            if (prouderList.getCode() == 0) {
 //                          Toast.makeText(mContext, prouderList.getHint(), Toast.LENGTH_SHORT).show();
-                            List<ProuderItem> list = prouderList.getA();
-                            if (list != null) {
-                                for (ProuderItem prouderItem : list) {
-                                    if (prouderItem.getF() > 0) {
-                                        SendMail sm = new SendMail();
-                                        for (String receicveer : Constant.receiveer) {
-                                            boolean city_Flag;
-                                            if (prouderItem.getK().toString().indexOf(prouderItem.getK().toString().valueOf('市')) == -1) {
-                                                //字符串中不存在 市
-                                                if (prouderItem.getK().toString().indexOf(prouderItem.getK().toString().valueOf('县')) != -1 || prouderItem.getK().toString().indexOf(prouderItem.getK().toString().valueOf('区')) != -1) {
-                                                    city_Flag = true;
+                                List<ProuderItem> list = prouderList.getA();
+                                if (list != null) {
+                                    for (ProuderItem prouderItem : list) {
+                                        if (prouderItem.getF() > 0) {
+                                            SendMail sm = new SendMail();
+                                            for (String receicveer : Constant.receiveer) {
+                                                boolean city_Flag;
+                                                if (prouderItem.getK().toString().indexOf(prouderItem.getK().toString().valueOf('市')) == -1) {
+                                                    //字符串中不存在 市
+                                                    if (prouderItem.getK().toString().indexOf(prouderItem.getK().toString().valueOf('县')) != -1 || prouderItem.getK().toString().indexOf(prouderItem.getK().toString().valueOf('区')) != -1) {
+                                                        city_Flag = true;
+                                                    } else {
+                                                        city_Flag = false;
+                                                    }
                                                 } else {
                                                     city_Flag = false;
                                                 }
-                                            } else {
-                                                city_Flag = false;
-                                            }
 
-                                            if (city_Flag) {
-                                                sm.sendMails(receicveer, "Teemo提醒您：" + cityName + prouderItem.getK() + "的 " + mKey + " 有货啦！！！", new StringBuffer(
-                                                        "赶快打开QQD，去 <U>"+ cityName + prouderItem.getK()+"</U> 兑换 <U>"+ mKey +"</U> 当前数量：<U>"+ prouderItem.getF() +"</U>  数量有限，先到先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  "+ current_Time + "</p>"));
-                                            } else {
-                                                sm.sendMails(receicveer, "Teemo提醒您：" + prouderItem.getK() + "的 " + mKey + " 有货啦！！！", new StringBuffer(
-                                                        "赶快打开QQD，去 <U>"+ prouderItem.getK()+"</U> 兑换 <U>"+ mKey +"</U> 当前数量：<U>"+ prouderItem.getF() +"</U>  数量有限，先到先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  "+ current_Time + "</p>"));
+                                                if (city_Flag) {
+                                                    sm.sendMails(receicveer, "Teemo提醒您：" + cityName + prouderItem.getK() + "的 " + key + " 有货啦！！！", new StringBuffer(
+                                                            "赶快打开QQD，去 <U>" + cityName + prouderItem.getK() + "</U> 兑换 <U>" + key + "</U> 当前数量：<U>" + prouderItem.getF() + "</U>  数量有限，先到先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
+                                                } else {
+                                                    sm.sendMails(receicveer, "Teemo提醒您：" + prouderItem.getK() + "的 " + key + " 有货啦！！！", new StringBuffer(
+                                                            "赶快打开QQD，去 <U>" + prouderItem.getK() + "</U> 兑换 <U>" + key + "</U> 当前数量：<U>" + prouderItem.getF() + "</U>  数量有限，先到先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
-                        } else {
+                            } else {
 //                            mBaseBean = a.fromJson(responseInfo.result.toString(), BaseBean.class);
-                            Toast.makeText(mContext, prouderList.getHint(), Toast.LENGTH_SHORT).show();
-                            try {
-                                QueryProuder.this.wait();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+                                Toast.makeText(mContext, prouderList.getHint(), Toast.LENGTH_SHORT).show();
+//                                try {
+//                                    QueryProuder.this.wait();
+//                                } catch (InterruptedException e) {
+//                                    e.printStackTrace();
+//                                }
                             }
+                        }
+
+                        @Override
+                        public void onFailure(HttpException error, String msg) {
+                            Log.e("xx", msg);
                         }
                     }
 
-                    @Override
-                    public void onFailure(HttpException error, String msg) {
-                        Log.e("xx", msg);
-                    }
+                            , null);
                 }
-
-                        , null);
             }
             try {
                 Thread.sleep(getRodm() * 60);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            new Thread(new QueryProuder(mContext, mKey)).start();
+            if (mKeys != null && !mKeys.isEmpty()) {
+                new Thread(new QueryProuder(mContext, mKeys)).start();
+            }
         }
     }
 }
