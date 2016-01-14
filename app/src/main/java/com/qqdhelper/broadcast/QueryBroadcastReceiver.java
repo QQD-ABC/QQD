@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.widget.Toast;
 
 import com.qqdhelper.BaseApplication;
+import com.qqdhelper.Constants;
 import com.qqdhelper.handler.QueryProduct;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class QueryBroadcastReceiver extends BroadcastReceiver {
         String msg = intent.getStringExtra("msg");
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
 
-        List<String> keys = intent.getStringArrayListExtra("list");
+        List<String> keys = intent.getStringArrayListExtra(Constants.INTENT_query_list);
 
         System.out.println("进入广播，开始准备查询......");
         BaseApplication.getApplication().initQueryKeys(keys);//初始化查询keys
