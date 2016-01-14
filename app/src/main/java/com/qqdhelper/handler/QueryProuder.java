@@ -111,10 +111,10 @@ public class QueryProuder implements Runnable {
 
                                                 if (city_Flag) {
                                                     sm.sendMails(receicveer, "Teemo提醒您：" + cityName + prouderItem.getK() + "的 " + key + " 有货啦！！！", new StringBuffer(
-                                                            "赶快打开QQD，去 <U>" + cityName + prouderItem.getK() + "</U> 兑换 <U>" + key + "</U> 当前数量：<U>" + prouderItem.getF() + "</U>  数量有限，先到先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
+                                                            "赶快打开QQD，去 <U>" + cityName + prouderItem.getK() + "</U> 兑换 <U>" + key + "</U> FV："+ prouderItem.getB() +"  当前数量：<U>" + prouderItem.getF() + "</U>  数量有限，先到先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
                                                 } else {
                                                     sm.sendMails(receicveer, "Teemo提醒您：" + prouderItem.getK() + "的 " + key + " 有货啦！！！", new StringBuffer(
-                                                            "赶快打开QQD，去 <U>" + prouderItem.getK() + "</U> 兑换 <U>" + key + "</U> 当前数量：<U>" + prouderItem.getF() + "</U>  数量有限，先到先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
+                                                            "赶快打开QQD，去 <U>" + prouderItem.getK() + "</U> 兑换 <U>" + key + "</U> FV："+ prouderItem.getB() +"  当前数量：<U>" + prouderItem.getF() + "</U>  数量有限，先到先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
                                                 }
                                             }
                                         }
