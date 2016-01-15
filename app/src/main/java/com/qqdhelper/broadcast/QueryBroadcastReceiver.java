@@ -31,7 +31,7 @@ public class QueryBroadcastReceiver extends BroadcastReceiver {
 //        if () {
 //        此处每次开启前需要关闭正在运行的查询线程
 //        }
-        new Thread(new QueryProduct(context, BaseApplication.getApplication().keys)).start();
+        QueryProduct.start(context, BaseApplication.getApplication().keys);
         System.out.println("查询进程已启动，正在查询中......");
     }
 }

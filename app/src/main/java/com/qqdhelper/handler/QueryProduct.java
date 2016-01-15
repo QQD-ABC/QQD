@@ -1,6 +1,7 @@
 package com.qqdhelper.handler;
 
 import android.content.Context;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -22,12 +23,40 @@ import java.util.HashMap;
 import java.util.List;
 
 public class QueryProduct implements Runnable {
+    private static QueryProduct mQueryProduct;
+    private static Thread mMainThread;
+    private static boolean isRunning = false;
+
     private final List<String> mKeys = new ArrayList<>();
-    List<ProuderItem> mCitys = new ArrayList<>();
+    private List<ProuderItem> mCitys = new ArrayList<>();
+
     private String current_Time;
-    Context mContext;
+    private Context mContext;
 
-    public QueryProduct(Context context, List<String> key) {
+    public static void start(Context context, final List<String> key) {
+        if (mQueryProduct == null) {
+            mQueryProduct = new QueryProduct(context, key);
+            mMainThread = new Thread(mQueryProduct);
+        }
+        if (isRunning) {
+            mMainThread.interrupt();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (key != null && !key.isEmpty()) {
+                        mMainThread = new Thread(mQueryProduct);
+                        mMainThread.start();
+                    }
+                }
+            }, 1500);
+        } else {
+            if (key != null && !key.isEmpty())
+                mMainThread.start();
+
+        }
+    }
+
+    private QueryProduct(Context context, List<String> key) {
         mContext = context;
         mKeys.clear();
         if (key != null) {
@@ -35,17 +64,6 @@ public class QueryProduct implements Runnable {
         }
     }
 
-    public QueryProduct(Context context, List<ProuderItem> citys, List<String> key) {
-        mContext = context;
-        mKeys.clear();
-        if (key != null) {
-            mKeys.addAll(key);
-        }
-        mCitys.clear();
-        if (citys != null) {
-            mCitys.addAll(citys);
-        }
-    }
 
     public int getRodm() {
         java.util.Random random = new java.util.Random();// 定义随机类
@@ -55,6 +73,7 @@ public class QueryProduct implements Runnable {
 
     @Override
     public void run() {
+        isRunning = true;
         List<ProuderItem> citys = mCitys.isEmpty() ? BaseApplication.getApplication().getCityData() : mCitys;
         if (citys != null) {
             for (int i = 0, j = citys.size(); i < j; i++) {//城市==========
@@ -65,6 +84,8 @@ public class QueryProduct implements Runnable {
                         Thread.sleep(getRodm());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                        isRunning = false;
+                        return;
                     }
                     Date d = new Date();
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//年-月-日 时:分:秒:毫秒
@@ -83,6 +104,7 @@ public class QueryProduct implements Runnable {
                     cityItem.setA(city);
                     cityItem.setB(cityName);
                     Log.e("xx", "开始查询:" + cityName + "的" + key);
+                    Log.e("xx", "Thread:" + Thread.currentThread().getName());
                     HttpHelperPost.Post(mContext, "http://4.everything4free.com/c/ae", param, new RequestCallBack<Object>() {
                         @Override
                         public void onSuccess(ResponseInfo<Object> responseInfo) {
@@ -150,10 +172,10 @@ public class QueryProduct implements Runnable {
                 Thread.sleep(getRodm() * 60);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+                isRunning = false;
+                return;
             }
-            if (mKeys != null && !mKeys.isEmpty()) {//run==========
-                new Thread(mCitys.isEmpty() ? new QueryProduct(mContext, mKeys) : new QueryProduct(mContext, mCitys, mKeys)).start();
-            }
+            start(mContext, mKeys);
         }
     }
 }
