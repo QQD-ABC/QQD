@@ -62,7 +62,13 @@ public class BaseApplication extends Application {
               this.keys.removeAll(keys);
               this.keys=query_keys;
         } else {
-            this.keys.add("mac");
+            //keys.add("ipad");
+            //keys.add("iphone");
+            keys.add("平板");
+            keys.add("电脑");
+            this.keys.add("手机");
+            this.keys.add("vivo");
+            this.keys.add("华为");
             this.keys.add("iphone");
             this.keys.add("ipad");
             this.keys.add("微波炉");
