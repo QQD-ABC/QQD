@@ -74,6 +74,7 @@ public class BaseApplication extends Application {
             keys.add("光波炉");
             keys.add("苹果手机");
             keys.add("苹果电脑");
+            keys.add("mac");
             keys.add("旅游");
             keys.add("旅行");
             keys.add("手环");

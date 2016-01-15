@@ -148,7 +148,7 @@ public class QueryProduct implements Runnable {
                                 temp_key = "少于FV"+ FV +"的商品";
                             }
                             if (FV > 0) {
-                                if (prouderItem.getF() > 0 && Integer.parseInt(prouderItem.getB()) < FV && Integer.parseInt(prouderItem.getB()) > 1000) {
+                                if (prouderItem.getF() > 0 && Integer.parseInt(prouderItem.getB()) <= FV && Integer.parseInt(prouderItem.getB()) >= 1000) {
                                     SendMail(cityName,temp_key,prouderItem);
                                 }
                             } else {
