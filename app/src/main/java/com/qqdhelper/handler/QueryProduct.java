@@ -102,8 +102,33 @@ public class QueryProduct implements Runnable {
                                                 System.out.println("邮件发送程序开始执行......");
                                                 sm.sendMails(receicveer, "Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + key + " 有货啦！！！", new StringBuffer(
                                                         "赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> 兑换 <U>" + prouderItem.getA() + "</U>， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
-                                                System.out.println("邮件发送程序执行完！");
+                                                System.out.println("邮件发送程序执行完毕！");
                                             }
+
+//                                            String receicveer = "";
+//                                            if (key.equals("旅游") || key.equals("旅行")) {
+//                                                receicveer = "kolvin@163.com";
+//                                            }
+//                                            if (key.equals("mac") || key.equals("苹果电脑")) {
+//                                                receicveer = "kolvin@163.com";
+//                                            }
+//                                            if (key.equals("微波炉") || key.equals("光波炉")) {
+//                                                receicveer = "cscc040426@163.com";
+//                                            }
+//                                            if (key.equals("iphone") || key.equals("ipad") || key.equals("苹果手机") || key.equals("手环")) {
+//                                                receicveer = "hushenglinchn@163.com";
+//                                            }
+//
+//                                            System.out.println("邮件发送至 "+ receicveer +" 程序开始执行......");
+//                                            sm.sendMails(receicveer, "Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + key + " 有货啦！！！", new StringBuffer(
+//                                                    "赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> 兑换 <U>" + prouderItem.getA() + "</U>， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
+//                                            System.out.println("邮件发送至 "+ receicveer +" 程序执行完毕！");
+//
+//                                            /**接收全部*/
+//                                            System.out.println("邮件发送程序开始执行......");
+//                                            sm.sendMails("13235809610@163.com", "Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + key + " 有货啦！！！", new StringBuffer(
+//                                                    "赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> 兑换 <U>" + prouderItem.getA() + "</U>， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
+//                                            System.out.println("邮件发送程序执行完毕！");
                                         }
                                     }
                                 }

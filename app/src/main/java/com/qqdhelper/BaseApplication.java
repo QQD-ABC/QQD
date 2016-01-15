@@ -62,11 +62,16 @@ public class BaseApplication extends Application {
               this.keys.removeAll(keys);
               this.keys=query_keys;
         } else {
-            this.keys.add("Xbox");
-            this.keys.add("psp");
             this.keys.add("mac");
             this.keys.add("iphone");
             this.keys.add("ipad");
+            this.keys.add("微波炉");
+            this.keys.add("光波炉");
+            this.keys.add("苹果手机");
+            this.keys.add("苹果电脑");
+            this.keys.add("旅游");
+            this.keys.add("旅行");
+            this.keys.add("手环");
         }
     }
 
