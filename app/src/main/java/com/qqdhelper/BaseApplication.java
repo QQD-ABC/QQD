@@ -59,25 +59,24 @@ public class BaseApplication extends Application {
      * */
     public void initQueryKeys(List<String> query_keys) {
         if (query_keys != null) {
-              this.keys.clear();
-              this.keys.addAll(query_keys);
+              keys.clear();
+              keys.addAll(query_keys);
         } else {
-            //keys.add("ipad");
-            //keys.add("iphone");
+            //keys.add("邮费");
             keys.add("平板");
             keys.add("电脑");
-            this.keys.add("手机");
-            this.keys.add("vivo");
-            this.keys.add("华为");
-            this.keys.add("iphone");
-            this.keys.add("ipad");
-            this.keys.add("微波炉");
-            this.keys.add("光波炉");
-            this.keys.add("苹果手机");
-            this.keys.add("苹果电脑");
-            this.keys.add("旅游");
-            this.keys.add("旅行");
-            this.keys.add("手环");
+            keys.add("手机");
+            keys.add("vivo");
+            keys.add("华为");
+            keys.add("iphone");
+            keys.add("ipad");
+            keys.add("微波炉");
+            keys.add("光波炉");
+            keys.add("苹果手机");
+            keys.add("苹果电脑");
+            keys.add("旅游");
+            keys.add("旅行");
+            keys.add("手环");
         }
     }
 

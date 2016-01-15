@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private AutoCompleteTextView mphoneView;
     private EditText mPasswordView;
     private LoginBean mLoginbean;
-    private String phone_aa = "15677811470";
+    private String phone_aa = "13235809610";
 
     private String phone;
     private String password;
@@ -121,7 +121,7 @@ public class LoginActivity extends AppCompatActivity {
 
             phone = phone_aa;
             param.put("a", phone);
-            param.put("b", z.getRSA(this, "a123456"));
+            param.put("b", z.getRSA(this, "a1234567"));
             System.out.println("密码:" + z.getRSA(this, "a1234567"));
 
             doPost("http://4.everything4free.com/a/aa", param);
@@ -152,17 +152,19 @@ public class LoginActivity extends AppCompatActivity {
                     System.out.println("登录返回数据：" + mLoginbean.toString());
                     Toast.makeText(LoginActivity.this, mLoginbean.getHint(), Toast.LENGTH_SHORT).show();
                     BaseApplication.getApplication().saveUserInfo(mLoginbean);
-
-//                    ArrayList<String> keys = new ArrayList<>();
-//                    keys.add("邮费");
-
+                    
                     Intent intent = new Intent();
                     /*  设置Intent对象的action属性  */
                     intent.setAction(Constants.QUERYACTION);
                     /* 为Intent对象添加附加信息 */
                     intent.putExtra("msg", "发送登录广播测试成功.....");
 
-//                    /* 为Intent对象添加附加信息 */
+//                    /* 为Intent对象添加 FV 信息 ，不需要可注释*/
+//                    intent.putExtra(Constants.INTENT_FV, 10000);
+
+//                    ArrayList<String> keys = new ArrayList<>();
+//                    keys.add("邮费");
+//                    /* 为Intent对象添加 关键词 信息 ，不需要可注释 */
 //                    intent.putStringArrayListExtra(Constants.INTENT_query_list, keys);
 
                     /* 发布广播 */

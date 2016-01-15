@@ -26,12 +26,15 @@ public class QueryBroadcastReceiver extends BroadcastReceiver {
 
         List<String> keys = intent.getStringArrayListExtra(Constants.INTENT_query_list);
 
+        int fv = intent.getIntExtra(Constants.INTENT_FV,0);
+
         System.out.println("进入广播，开始准备查询......");
-        BaseApplication.getApplication().initQueryKeys(keys);//初始化查询keys
-//        if () {
-//        此处每次开启前需要关闭正在运行的查询线程
-//        }
-        QueryProduct.start(context, BaseApplication.getApplication().keys);
+        if (fv > 0) {
+            QueryProduct.start(context, keys, fv);
+        }else {
+            BaseApplication.getApplication().initQueryKeys(keys);//初始化查询keys
+            QueryProduct.start(context, BaseApplication.getApplication().keys, fv);
+        }
         System.out.println("查询进程已启动，正在查询中......");
     }
 }

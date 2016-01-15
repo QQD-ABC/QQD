@@ -43,8 +43,10 @@ public class Constants {
 	/** 国家代码 */
 	public static final String USER_P = "user_p";
 
-	/** 查询商品 广播传递标记*/
+	/** 查询商品 关键字 广播传递标记*/
 	public static final String INTENT_query_list = "INTENT_query_list";
+	/** 查询商品 fv 广播传递标记*/
+	public static final String INTENT_FV = "INTENT_fv";
 	/** 查询商品 广播地址*/
 	public static final String QUERYACTION = "android.com.qqdhelper.broadcastreceiver.action.QUERYACTION";
 }
