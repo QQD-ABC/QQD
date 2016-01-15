@@ -30,7 +30,7 @@ public class QueryBroadcastReceiver extends BroadcastReceiver {
 
         System.out.println("进入广播，开始准备查询......");
         if (fv > 0) {
-            QueryProduct.start(context, keys, fv);
+            QueryProduct.start(context, null, fv);
         }else {
             BaseApplication.getApplication().initQueryKeys(keys);//初始化查询keys
             QueryProduct.start(context, BaseApplication.getApplication().keys, fv);
