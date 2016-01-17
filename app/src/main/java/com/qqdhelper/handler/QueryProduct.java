@@ -17,6 +17,7 @@ import com.qqdhelper.Constants;
 import com.qqdhelper.bean.prouder.ProuderItem;
 import com.qqdhelper.bean.prouder.ProuderList;
 import com.qqdhelper.net.HttpHelperPost;
+import com.qqdhelper.net.z;
 
 import org.w3c.dom.Text;
 
@@ -52,14 +53,14 @@ public class QueryProduct implements Runnable {
                 @Override
                 public void run() {
                     //if (key != null && !key.isEmpty()) {
-                        mMainThread = new Thread(mQueryProduct);
-                        mMainThread.start();
+                    mMainThread = new Thread(mQueryProduct);
+                    mMainThread.start();
                     //}
                 }
             }, 1500);
         } else {
             //if (key != null && !key.isEmpty())
-                mMainThread.start();
+            mMainThread.start();
         }
     }
 
@@ -101,11 +102,11 @@ public class QueryProduct implements Runnable {
                 isRunning = false;
                 return;
             }
-            start(mContext, mKeys , 0);
+            start(mContext, mKeys, 0);
         }
     }
 
-    private void doQuery(final String key){
+    private void doQuery(final String key) {
         try {
             Thread.sleep(getRodm());
         } catch (InterruptedException e) {
@@ -145,15 +146,16 @@ public class QueryProduct implements Runnable {
                             }
                             String temp_key = key;
                             if (TextUtils.isEmpty(temp_key)) {
-                                temp_key = "少于FV"+ FV +"的商品";
+                                temp_key = "少于FV" + FV + "的商品";
                             }
                             if (FV > 0) {
                                 if (prouderItem.getF() > 0 && Integer.parseInt(prouderItem.getB()) <= FV && Integer.parseInt(prouderItem.getB()) >= 1000) {
-                                    SendMail(cityName,temp_key,prouderItem);
+                                    SendMail(cityName, temp_key, prouderItem);
                                 }
                             } else {
                                 if (prouderItem.getF() > 0) {
-                                    SendMail(cityName,temp_key,prouderItem);
+                                    autoExchange(prouderItem);
+                                    SendMail(cityName, temp_key, prouderItem);
                                 }
                             }
                         }
@@ -172,7 +174,37 @@ public class QueryProduct implements Runnable {
         }, null);
     }
 
-    private void SendMail(String cityName,String temp_key,ProuderItem prouderItem){
+    private void autoExchange(ProuderItem prouderItem) {
+        if (TextUtils.isEmpty(BaseApplication.PWD)) {
+            Log.e("xx", "没有兑换密码");
+            return;
+        }
+        if (!TextUtils.isEmpty(BaseApplication.MSG) && !prouderItem.getA().contains(BaseApplication.MSG)) {
+            Log.e("xx", prouderItem.getA() + "-不包含关键字-" + BaseApplication.MSG);
+            return;
+        }
+        HashMap<String, String> param = new HashMap<>();
+        param.put("a", BaseApplication.getApplication().getLogin_Int(Constants.USER_B) + "");
+        param.put("b", prouderItem.getH() + "");
+        param.put("c", "1");
+        param.put("d", prouderItem.getJ() + "");
+        param.put("e", z.getRSA(mContext, BaseApplication.PWD));
+        HttpHelperPost.Post(mContext, "http://4.everything4free.com/c/ag", param, new RequestCallBack<Object>() {
+            @Override
+            public void onSuccess(ResponseInfo<Object> responseInfo) {
+                Gson a = new Gson();
+//                ProuderList prouderList = a.fromJson(responseInfo.result.toString(), ProuderList.class);
+                Log.e("xx", "兑换结果:" + responseInfo.result.toString());
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("xx", msg);
+            }
+        }, null);
+    }
+
+    private void SendMail(String cityName, String temp_key, ProuderItem prouderItem) {
         SendMail sm = new SendMail();
         for (String receicveer : Constant.receiveer) {
             System.out.println("邮件发送程序开始执行......");

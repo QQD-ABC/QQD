@@ -63,6 +63,30 @@
 
             </android.support.design.widget.TextInputLayout>
 
+            <EditText
+                android:id="@+id/pay_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="兑换密码(输入后开始自动兑换)"
+                android:imeActionId="@+id/login"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true" />
+
+            <EditText
+                android:id="@+id/pay_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="兑换限制"
+                android:imeActionId="@+id/login"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true" />
+
             <Button
                 android:id="@+id/phone_sign_in_button"
                 style="?android:textAppearanceSmall"

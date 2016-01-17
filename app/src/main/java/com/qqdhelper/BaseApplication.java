@@ -27,6 +27,9 @@ public class BaseApplication extends Application {
     private String cityCode;
     private String cityName;
 
+    public static String PWD;
+    public static String MSG;
+
     private SharedPreferences mSharedPreferences;//保存本地资料
     private List<ProuderItem> citys;
 
@@ -56,28 +59,28 @@ public class BaseApplication extends Application {
     /**
      * 初始化 查询键
      * 如果传递值为null，读取默认值
-     * */
+     */
     public void initQueryKeys(List<String> query_keys) {
         if (query_keys != null) {
-              keys.clear();
-              keys.addAll(query_keys);
+            keys.clear();
+            keys.addAll(query_keys);
         } else {
             //keys.add("邮费");
-            keys.add("平板");
-            keys.add("电脑");
-            keys.add("手机");
-            keys.add("vivo");
-            keys.add("华为");
-            keys.add("iphone");
-            keys.add("ipad");
-            keys.add("微波炉");
-            keys.add("光波炉");
-            keys.add("苹果手机");
-            keys.add("苹果电脑");
-            keys.add("mac");
-            keys.add("旅游");
-            keys.add("旅行");
-            keys.add("手环");
+//            keys.add("平板");
+//            keys.add("电脑");
+//            keys.add("手机");
+//            keys.add("vivo");
+//            keys.add("华为");
+//            keys.add("iphone");
+            keys.add("邮费");
+//            keys.add("微波炉");
+//            keys.add("光波炉");
+//            keys.add("苹果手机");
+//            keys.add("苹果电脑");
+//            keys.add("mac");
+//            keys.add("旅游");
+//            keys.add("旅行");
+//            keys.add("手环");
         }
     }
 
