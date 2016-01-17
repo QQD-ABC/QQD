@@ -39,10 +39,12 @@ public class LoginActivity extends AppCompatActivity {
     private AutoCompleteTextView mphoneView;
     private EditText mPasswordView;
     private LoginBean mLoginbean;
-    private String phone_aa = "13235809610";
+    private String phone_aa = "15677811";
 
     private String phone;
     private String password;
+    private EditText mPayPasswordView;
+    private EditText mPayMsgView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,8 @@ public class LoginActivity extends AppCompatActivity {
         mphoneView = (AutoCompleteTextView) findViewById(R.id.phone);
 
         mPasswordView = (EditText) findViewById(R.id.password);
+        mPayPasswordView = (EditText) findViewById(R.id.pay_password);
+        mPayMsgView = (EditText) findViewById(R.id.pay_msg);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -121,9 +125,10 @@ public class LoginActivity extends AppCompatActivity {
 
             phone = phone_aa;
             param.put("a", phone);
-            param.put("b", z.getRSA(this, "a1234567"));
+            param.put("b", z.getRSA(this, "a123456"));
             System.out.println("密码:" + z.getRSA(this, "a1234567"));
-
+            BaseApplication.PWD = mPayPasswordView.getText().toString();
+            BaseApplication.MSG = mPayMsgView.getText().toString();
             doPost("http://4.everything4free.com/a/aa", param);
         }
     }
@@ -138,21 +143,20 @@ public class LoginActivity extends AppCompatActivity {
         return password.length() > 4;
     }
 
-    protected <T> void doPost(String paramString, HashMap<String, String> paramHashMap)
-    {
+    protected <T> void doPost(String paramString, HashMap<String, String> paramHashMap) {
         HttpHelperPost.Post(LoginActivity.this, paramString, paramHashMap, new RequestCallBack() {
             @Override
             public void onSuccess(ResponseInfo responseInfo) {
                 Log.e("xx", "responseInfo" + responseInfo);
 
-                Gson a=new Gson();
-                mLoginbean = a.fromJson(responseInfo.result.toString(),LoginBean.class);
-                System.out.println("code："+mLoginbean.getCode());
-                if(mLoginbean.getCode() == 0){
+                Gson a = new Gson();
+                mLoginbean = a.fromJson(responseInfo.result.toString(), LoginBean.class);
+                System.out.println("code：" + mLoginbean.getCode());
+                if (mLoginbean.getCode() == 0) {
                     System.out.println("登录返回数据：" + mLoginbean.toString());
                     Toast.makeText(LoginActivity.this, mLoginbean.getHint(), Toast.LENGTH_SHORT).show();
                     BaseApplication.getApplication().saveUserInfo(mLoginbean);
-                    
+
                     Intent intent = new Intent();
                     /*  设置Intent对象的action属性  */
                     intent.setAction(Constants.QUERYACTION);
@@ -172,15 +176,15 @@ public class LoginActivity extends AppCompatActivity {
 
                     System.out.println("登录getLoginInt：" + BaseApplication.getApplication().getLogin_Int(Constants.USER_B));
                     System.out.println("登录getLoginString：" + BaseApplication.getApplication().getLogin_String(Constants.USER_A));
-                }else if (mLoginbean.getCode() == 1) {
-                    Toast.makeText(LoginActivity.this,mLoginbean.getHint(),Toast.LENGTH_SHORT).show();
+                } else if (mLoginbean.getCode() == 1) {
+                    Toast.makeText(LoginActivity.this, mLoginbean.getHint(), Toast.LENGTH_SHORT).show();
                     Intent localIntent1 = new Intent(LoginActivity.this, ValidatePhoneActivity.class);
                     System.out.println("切换登录c:" + mLoginbean.getC());
                     localIntent1.putExtra("userID", Integer.parseInt(mLoginbean.getC()));
                     localIntent1.putExtra("phone", phone);
                     LoginActivity.this.startActivity(localIntent1);
                 } else {
-                    Toast.makeText(LoginActivity.this,mLoginbean.getHint(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, mLoginbean.getHint(), Toast.LENGTH_SHORT).show();
                 }
             }
 
