@@ -22,9 +22,12 @@ import com.qqdhelper.net.z;
 
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -41,10 +44,15 @@ public class QueryProduct implements Runnable {
 
     private static int FV;
 
-    public static void start(Context context, final List<String> key, int fv) {
+    private static int PastDay;
+
+    private Date d;
+
+    public static void start(Context context, final List<String> key, int fv,int pastDay) {
 
         if (mQueryProduct == null) {
             FV = fv;
+            PastDay = pastDay;
             mQueryProduct = new QueryProduct(context, key);
             mMainThread = new Thread(mQueryProduct);
         }
@@ -103,7 +111,7 @@ public class QueryProduct implements Runnable {
                 isRunning = false;
                 return;
             }
-            start(mContext, mKeys, 0);
+            start(mContext, mKeys, 0 , 0);
         }
     }
 
@@ -115,7 +123,7 @@ public class QueryProduct implements Runnable {
             isRunning = false;
             return;
         }
-        Date d = new Date();
+        d = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//年-月-日 时:分:秒:毫秒
         current_Time = sdf.format(d).toString();
         System.out.println("当前时间：" + sdf.format(d));
@@ -142,22 +150,37 @@ public class QueryProduct implements Runnable {
                     List<ProuderItem> list = prouderList.getA();
                     if (list != null) {
                         for (ProuderItem prouderItem : list) {
-
+                            System.out.println("商家编号：" + prouderItem.getP());
+                            dealMerchantsNo(prouderItem.getP());
                             if (!mCitys.contains(cityItem)) {
                                 mCitys.add(cityItem);
                             }
+
                             String temp_key = key;
+
                             if (TextUtils.isEmpty(temp_key)) {
                                 temp_key = "少于FV" + FV + "的商品";
                             }
                             if (FV > 0) {
                                 if (prouderItem.getF() > 0 && Integer.parseInt(prouderItem.getB()) <= FV && Integer.parseInt(prouderItem.getB()) >= 1000) {
-                                    SendMail(cityName, temp_key, prouderItem);
+                                    if (PastDay < 0) {//判断是否为新店
+                                        if (Integer.parseInt(dealMerchantsNo(prouderItem.getP())) >= Integer.parseInt(getPastDay(d, PastDay))) {
+                                            SendNewMail(cityName, temp_key, prouderItem);
+                                        }
+                                    } else {
+                                        SendMail(cityName, temp_key, prouderItem);
+                                    }
                                 }
                             } else {
                                 if (prouderItem.getF() > 0) {
-                                    getStoreExcLimit(cityName,temp_key,prouderItem);//查询商家兑换限额，完成自动兑换
-                                    SendMail(cityName, temp_key, prouderItem);
+                                    getStoreExcLimit(cityName, temp_key, prouderItem);//查询商家兑换限额，完成自动兑换
+                                    if (PastDay < 0) {//判断是否为新店
+                                        if (Integer.parseInt(dealMerchantsNo(prouderItem.getP())) >= Integer.parseInt(getPastDay(d, PastDay))) {
+                                            SendNewMail(cityName, temp_key, prouderItem);
+                                        }
+                                    } else {
+                                        SendMail(cityName, temp_key, prouderItem);
+                                    }
                                 }
                             }
                         }
@@ -235,33 +258,19 @@ public class QueryProduct implements Runnable {
         for (String receicveer : Constant.receiveer) {
             System.out.println("邮件发送程序开始执行......");
             sm.sendMails(receicveer, "Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + temp_key + " 有货啦！！！", new StringBuffer(
-                    "赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> 兑换 <U>" + prouderItem.getA() + "</U>， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
+                    "赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> (开店时间：<U>" + dealDate(dealMerchantsNo(prouderItem.getP())) + "</U>) 兑换 <U>" + prouderItem.getA() + "</U>， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
             System.out.println("邮件发送程序执行完毕！");
         }
+    }
 
-//        String receicveer = "";
-//        if (temp_key.equals("旅游") || temp_key.equals("旅行")) {
-//            receicveer = "kolvin@163.com";
-//        }
-//        if (temp_key.equals("mac") || temp_key.equals("苹果电脑")) {
-//            receicveer = "kolvin@163.com";
-//        }
-//        if (temp_key.equals("微波炉") || temp_key.equals("光波炉")) {
-//            receicveer = "cscc040426@163.com";
-//        }
-//        if (temp_key.equals("iphone") || temp_key.equals("ipad") || temp_key.equals("苹果手机") || temp_key.equals("手环")) {
-//            receicveer = "hushenglinchn@163.com";
-//        }
-//        System.out.println("邮件发送至 "+ receicveer +" 程序开始执行......");
-//        sm.sendMails(receicveer, "Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + temp_key + " 有货啦！！！", new StringBuffer(
-//                "赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> 兑换 <U>" + prouderItem.getA() + "</U>， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
-//        System.out.println("邮件发送至 "+ receicveer +" 程序执行完毕！");
-//
-//        /**接收全部*/
-//        System.out.println("邮件发送程序开始执行......");
-//        sm.sendMails("13235809610@163.com", "Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + temp_key + " 有货啦！！！", new StringBuffer(
-//                "赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> 兑换 <U>" + prouderItem.getA() + "</U>， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
-//        System.out.println("邮件发送程序执行完毕！");
+    private void SendNewMail(String cityName, String temp_key, ProuderItem prouderItem) {
+        SendMail sm = new SendMail();
+        for (String receicveer : Constant.receiveer) {
+            System.out.println("邮件发送程序开始执行......");
+            sm.sendMails(receicveer, "新店提醒~~ Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + temp_key + " 有货啦！！！", new StringBuffer(
+                    "新店号外！新店号外！新店号外！<br>赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> (开店时间：<U>" + dealDate(dealMerchantsNo(prouderItem.getP())) + "</U>) 兑换 <U>" + prouderItem.getA() + "</U>， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  新店开张，数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
+            System.out.println("邮件发送程序执行完毕！");
+        }
     }
 
     private void autoES_SendMail(String cityName, String temp_key, ProuderItem prouderItem) {
@@ -270,6 +279,42 @@ public class QueryProduct implements Runnable {
         sm.sendMails("13235809610@163.com", "Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + temp_key + " 自动兑换成功！！！", new StringBuffer(
                 "您在QQD里的 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> 自动兑换 <U>" + prouderItem.getA() + "</U> 处理成功。<br>赶快打开QQD与商家联系发货事宜！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
         System.out.println("自动兑换成功邮件发送程序执行完毕！");
+    }
+
+    public String getPastDay(Date d,int key) {
+        GregorianCalendar gc =new GregorianCalendar();
+        gc.setTime(d);
+        gc.add(Calendar.DAY_OF_MONTH, key);
+        gc.set(gc.get(Calendar.YEAR), gc.get(Calendar.MONTH), gc.get(Calendar.DATE));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");//年月日
+        return sdf.format(gc.getTime());
+    }
+
+    public String dealMerchantsNo(String no) {
+        if (TextUtils.isEmpty(no)) {
+              return "";
+        }
+        if (no.contains("QQD")) {
+             no = no.replace("QQD","").substring(0,8);
+        }
+        System.out.println("商家开店时间：" + no);
+        return no;
+    }
+
+    /**
+     * yyyyMMdd To yyyy年MM月dd日
+     * */
+    private static String dealDate(String date){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy年MM月dd日");
+        Date date2 = null;
+        try {
+            date2 = sdf.parse(date);
+            date = sdf2.format(date2);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 }
 
