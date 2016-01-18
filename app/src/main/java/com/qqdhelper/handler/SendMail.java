@@ -1,5 +1,6 @@
 package com.qqdhelper.handler;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.qqdhelper.BaseApplication;
@@ -129,4 +130,6 @@ public class SendMail {
                 "aaaaaaaaaaaaa"));
         System.out.print("dfsdfasdf");
     }
+
+
 }
