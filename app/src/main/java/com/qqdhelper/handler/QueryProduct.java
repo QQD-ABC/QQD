@@ -16,6 +16,7 @@ import com.qqdhelper.Constant;
 import com.qqdhelper.Constants;
 import com.qqdhelper.bean.prouder.ProuderItem;
 import com.qqdhelper.bean.prouder.ProuderList;
+import com.qqdhelper.callback.SnscityRequestCallBack;
 import com.qqdhelper.net.HttpHelperPost;
 import com.qqdhelper.net.z;
 
@@ -154,7 +155,7 @@ public class QueryProduct implements Runnable {
                                 }
                             } else {
                                 if (prouderItem.getF() > 0) {
-                                    autoExchange(prouderItem);
+                                    getStoreExcLimit(cityName,temp_key,prouderItem);//查询商家兑换限额，完成自动兑换
                                     SendMail(cityName, temp_key, prouderItem);
                                 }
                             }
@@ -174,27 +175,51 @@ public class QueryProduct implements Runnable {
         }, null);
     }
 
-    private void autoExchange(ProuderItem prouderItem) {
+    private void getStoreExcLimit(String cityName,String temp_key,final ProuderItem prouderItem){
+
+        HashMap<String, String> param = new HashMap<>();
+        param.put("a", BaseApplication.getApplication().getLogin_Int(Constants.USER_B) + "");
+        param.put("b", prouderItem.getJ() + "");
+        HttpHelperPost.Post(mContext, "http://4.everything4free.com/c/ln", param, new RequestCallBack<Object>() {
+            @Override
+            public void onSuccess(ResponseInfo<Object> responseInfo) {
+                Log.e("xx", "可兑换结果:" + responseInfo.result.toString());
+                Gson ma = new Gson();
+                ProuderItem prouderItem1 = ma.fromJson(responseInfo.result.toString(), ProuderItem.class);
+                if(Integer.parseInt(prouderItem1.getB()) > 0 && (Integer.parseInt(prouderItem1.getB()) - Integer.parseInt(prouderItem.getB())) >= 0){
+                    autoExchange(cityName,temp_key,prouderItem);//执行自动兑换程序
+                } else {
+                    Toast.makeText(mContext,"商家每天最多可接受10w FV",Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(HttpException error, String msg) {
+                Log.e("xx", msg);
+            }
+        }, null);
+    }
+
+    private void autoExchange(final String mcityName, final String mcityKey, final ProuderItem mprouderItem) {
         if (TextUtils.isEmpty(BaseApplication.PWD)) {
             Log.e("xx", "没有兑换密码");
             return;
         }
-        if (!TextUtils.isEmpty(BaseApplication.MSG) && !prouderItem.getA().contains(BaseApplication.MSG)) {
-            Log.e("xx", prouderItem.getA() + "-不包含关键字-" + BaseApplication.MSG);
+        if (!TextUtils.isEmpty(BaseApplication.MSG) && !mprouderItem.getA().contains(BaseApplication.MSG)) {
+            Log.e("xx", mprouderItem.getA() + "-不包含关键字-" + BaseApplication.MSG);
             return;
         }
         HashMap<String, String> param = new HashMap<>();
         param.put("a", BaseApplication.getApplication().getLogin_Int(Constants.USER_B) + "");
-        param.put("b", prouderItem.getH() + "");
+        param.put("b", mprouderItem.getH() + "");
         param.put("c", "1");
-        param.put("d", prouderItem.getJ() + "");
+        param.put("d", mprouderItem.getJ() + "");
         param.put("e", z.getRSA(mContext, BaseApplication.PWD));
         HttpHelperPost.Post(mContext, "http://4.everything4free.com/c/ag", param, new RequestCallBack<Object>() {
             @Override
             public void onSuccess(ResponseInfo<Object> responseInfo) {
-                Gson a = new Gson();
-//                ProuderList prouderList = a.fromJson(responseInfo.result.toString(), ProuderList.class);
                 Log.e("xx", "兑换结果:" + responseInfo.result.toString());
+                autoES_SendMail(mcityName,mcityKey,mprouderItem);
             }
 
             @Override
@@ -236,6 +261,14 @@ public class QueryProduct implements Runnable {
 //        sm.sendMails("13235809610@163.com", "Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + temp_key + " 有货啦！！！", new StringBuffer(
 //                "赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> 兑换 <U>" + prouderItem.getA() + "</U>， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
 //        System.out.println("邮件发送程序执行完毕！");
+    }
+
+    private void autoES_SendMail(String cityName, String temp_key, ProuderItem prouderItem) {
+        SendMail sm = new SendMail();
+        System.out.println("自动兑换成功邮件发送程序开始执行......");
+        sm.sendMails("13235809610@163.com", "Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + temp_key + " 自动兑换成功！！！", new StringBuffer(
+                "您在QQD里的 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> 自动兑换 <U>" + prouderItem.getA() + "</U> 处理成功。<br>赶快打开QQD与商家联系发货事宜！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
+        System.out.println("自动兑换成功邮件发送程序执行完毕！");
     }
 }
 
