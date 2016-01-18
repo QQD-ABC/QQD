@@ -142,6 +142,7 @@ public class QueryProduct implements Runnable {
                     List<ProuderItem> list = prouderList.getA();
                     if (list != null) {
                         for (ProuderItem prouderItem : list) {
+
                             if (!mCitys.contains(cityItem)) {
                                 mCitys.add(cityItem);
                             }
@@ -175,7 +176,7 @@ public class QueryProduct implements Runnable {
         }, null);
     }
 
-    private void getStoreExcLimit(String cityName,String temp_key,final ProuderItem prouderItem){
+    private void getStoreExcLimit(final String cityName, final String temp_key,final ProuderItem prouderItem){
 
         HashMap<String, String> param = new HashMap<>();
         param.put("a", BaseApplication.getApplication().getLogin_Int(Constants.USER_B) + "");
