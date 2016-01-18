@@ -39,7 +39,7 @@ public class LoginActivity extends AppCompatActivity {
     private AutoCompleteTextView mphoneView;
     private EditText mPasswordView;
     private LoginBean mLoginbean;
-    private String phone_aa = "13235809610";
+    private String phone_aa = "13067846724";
 
     private String phone;
     private String password;
@@ -166,8 +166,8 @@ public class LoginActivity extends AppCompatActivity {
 //                    /* FV查询开关 为Intent对象添加 FV 信息 ，不需要可注释*/
 //                    intent.putExtra(Constants.INTENT_FV, 10000);
 
-//                     /* NEW店查询 为Intent对象添加 FV 信息 ，不需要可注释*/
-//                     intent.putExtra(Constants.INTENT_NEW, -12);//新店查询是指距离今天前多少天开的店
+                     /* NEW店查询 为Intent对象添加 NEW 信息 ，不需要可注释*/
+                     intent.putExtra(Constants.INTENT_NEW, -20);//新店查询是指距离今天前多少天开的店
 
 //                    ArrayList<String> keys = new ArrayList<>();
 //                    keys.add("邮费");
