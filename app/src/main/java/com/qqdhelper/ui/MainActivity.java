@@ -11,7 +11,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.qqdhelper.Constant;
 import com.qqdhelper.R;
+import com.qqdhelper.handler.SendMail;
 import com.qqdhelper.net.z;
 
 public class MainActivity extends AppCompatActivity {
@@ -60,6 +62,13 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        }, null);
         z.getRSA(this, "a123456");
+        SendMail sm = new SendMail();
+        for (String receicveer : Constant.receiveer) {
+            System.out.println("邮件发送程序开始执行......");
+//            BaseApplication.getApplication().get
+            sm.sendMails(receicveer, "Teemo提醒您：开始监听~", new StringBuffer("asd"));
+            System.out.println("邮件发送程序执行完毕！");
+        }
     }
 
     @Override
