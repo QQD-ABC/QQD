@@ -1,7 +1,6 @@
 package com.qqdhelper.handler;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,11 +15,8 @@ import com.qqdhelper.Constant;
 import com.qqdhelper.Constants;
 import com.qqdhelper.bean.prouder.ProuderItem;
 import com.qqdhelper.bean.prouder.ProuderList;
-import com.qqdhelper.callback.SnscityRequestCallBack;
 import com.qqdhelper.net.HttpHelperPost;
 import com.qqdhelper.net.z;
-
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -58,7 +54,7 @@ public class QueryProduct implements Runnable {
         }
         if (isRunning) {
             mMainThread.interrupt();
-            new Handler().postDelayed(new Runnable() {
+            new Handler(context.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     //if (key != null && !key.isEmpty()) {
