@@ -31,6 +31,10 @@ public class BaseApplication extends Application {
     public static String PAY_PWD;
     /**兑换限制 (自动兑换商品关键字)*/
     public static String AUTO_MSG;
+    /**兑换说明 (配置说明)*/
+    public static String AUTO_INT = "";
+//    /**兑换说明 (配置说明)*/
+//    public static String AUTO_INT = "当前自动兑换配置：锦州 姜涛通讯 苹果6s 玫瑰金16g";
 
     private SharedPreferences mSharedPreferences;//保存本地资料
     private List<ProuderItem> citys;

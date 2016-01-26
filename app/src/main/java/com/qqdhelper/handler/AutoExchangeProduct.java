@@ -39,7 +39,7 @@ public class AutoExchangeProduct implements Runnable {
 
     private Date d;
 
-    private String pro_Id = "9579";
+    private String pro_Id = "7039";
 
     public static void start(Context context) {
 
@@ -107,19 +107,20 @@ public class AutoExchangeProduct implements Runnable {
                 Gson ma = new Gson();
                 BaseBean baseBean1 = ma.fromJson(responseInfo.result.toString(), BaseBean.class);
                 if (baseBean1.getCode() == 0) {
-                    if (pro_Id.equals("9579")) {
+                    if (pro_Id.equals("7039")) {
                         ProuderItem a = new ProuderItem();
-                        a.setA("苹果 6sp 128g");
+                        a.setA("苹果6s 玫瑰金16g");
                         a.setK("古塔区姜涛通讯器材经销处");
-                        autoES_SendMail("锦州市", "苹果 6sp 128g", a);
-                    } else {
-                        ProuderItem b = new ProuderItem();
-                        b.setA("苹果 ipad pro 128g");
-                        b.setK("古塔区姜涛通讯器材经销处");
-                        autoES_SendMail("锦州市", "苹果 ipad pro 128g", b);
+                        autoES_SendMail("锦州市", "苹果6s 玫瑰金16g", a);
                     }
-                    pro_Id = "9567";
-                    System.out.println("ID 改变一次:" + pro_Id);
+//                    else {
+//                        ProuderItem b = new ProuderItem();
+//                        b.setA("苹果 ipad pro 128g");
+//                        b.setK("古塔区姜涛通讯器材经销处");
+//                        autoES_SendMail("锦州市", "苹果 ipad pro 128g", b);
+//                    }
+//                    pro_Id = "9567";
+//                    System.out.println("ID 改变一次:" + pro_Id);
                 } else {
                     count++;
                     Toast.makeText(mContext,"自动兑换失败"+ count +"次,"+responseInfo.result.toString() ,Toast.LENGTH_SHORT).show();

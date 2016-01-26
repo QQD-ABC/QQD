@@ -47,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     private String password;
     private EditText mPayPasswordView;
     private EditText mPayMsgView;
+    private TextView auto_instructions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,14 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         // Set up the login form.
         mphoneView = (AutoCompleteTextView) findViewById(R.id.phone);
+
+        auto_instructions = (TextView) findViewById(R.id.auto_instructions);
+        if (!TextUtils.isEmpty(BaseApplication.AUTO_INT)) {
+            auto_instructions.setVisibility(View.VISIBLE);
+            auto_instructions.setText(BaseApplication.AUTO_INT);
+        } else {
+            auto_instructions.setVisibility(View.GONE);
+        }
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPayPasswordView = (EditText) findViewById(R.id.pay_password);

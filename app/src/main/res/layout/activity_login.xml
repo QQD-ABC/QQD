@@ -89,6 +89,12 @@
                 android:singleLine="true"
                 android:textSize="14sp" />
 
+            <TextView
+                android:id="@+id/auto_instructions"
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
             <Button
                 android:id="@+id/phone_sign_in_button"
                 style="?android:textAppearanceSmall"
