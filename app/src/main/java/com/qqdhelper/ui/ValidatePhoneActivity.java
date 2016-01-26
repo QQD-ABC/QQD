@@ -144,7 +144,7 @@ public class ValidatePhoneActivity extends AppCompatActivity implements OnClickL
 
                     Intent intent = new Intent();
                     /*  设置Intent对象的action属性  */
-                    intent.setAction(Constants.QUERYACTION);
+                    intent.setAction(Constants.QQDACTION);
                     /* 为Intent对象添加附加信息 */
                     intent.putExtra("msg", "发送验证广播测试成功.....");
                     /* 发布广播 */
