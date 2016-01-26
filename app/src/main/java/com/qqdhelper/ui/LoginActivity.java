@@ -26,6 +26,8 @@ import com.qqdhelper.bean.LoginBean;
 import com.qqdhelper.net.HttpHelperPost;
 import com.qqdhelper.net.z;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -39,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     private AutoCompleteTextView mphoneView;
     private EditText mPasswordView;
     private LoginBean mLoginbean;
-    private String phone_aa = "13067846724";
+    private String phone_aa = "13235809610";
 
     private String phone;
     private String password;
@@ -117,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             HashMap<String, String> param = new HashMap<>();
-//
+
 //            param.put("a", phone);
 //            param.put("b", z.getRSA(this, password));
 //            System.out.println("密码源文:" + password);
@@ -127,8 +129,8 @@ public class LoginActivity extends AppCompatActivity {
             param.put("a", phone);
             param.put("b", z.getRSA(this, "a1234567"));
             System.out.println("密码:" + z.getRSA(this, "a1234567"));
-            BaseApplication.PWD = mPayPasswordView.getText().toString();
-            BaseApplication.MSG = mPayMsgView.getText().toString();
+            BaseApplication.PAY_PWD = mPayPasswordView.getText().toString();
+            BaseApplication.AUTO_MSG = mPayMsgView.getText().toString();
             doPost("http://4.everything4free.com/a/aa", param);
         }
     }
@@ -159,15 +161,17 @@ public class LoginActivity extends AppCompatActivity {
 
                     Intent intent = new Intent();
                     /*  设置Intent对象的action属性  */
-                    intent.setAction(Constants.QUERYACTION);
+                    intent.setAction(Constants.QQDACTION);
                     /* 为Intent对象添加附加信息 */
                     intent.putExtra("msg", "发送登录广播测试成功.....");
 
-//                    /* FV查询开关 为Intent对象添加 FV 信息 ，不需要可注释*/
-//                    intent.putExtra(Constants.INTENT_FV, 10000);
+//                  /* FV查询开关 为Intent对象添加 FV 信息 ，不需要可注释*/
+//                  intent.putExtra(Constants.INTENT_FV, 10000);
 
-                     /* NEW店查询 为Intent对象添加 NEW 信息 ，不需要可注释*/
-                     intent.putExtra(Constants.INTENT_NEW, -20);//新店查询是指距离今天前多少天开的店
+                    if (!TextUtils.isEmpty(BaseApplication.PAY_PWD)) {
+                        /* NEW店查询 为Intent对象添加 自动兑换 信息 ，不需要可注释*/
+                        intent.putExtra(Constants.INTENT_AUTO, true);//自动兑换开关，需进入线程内配置相关属性
+                    }
 
 //                    ArrayList<String> keys = new ArrayList<>();
 //                    keys.add("邮费");

@@ -59,6 +59,7 @@ public class HttpHelperPost {
         localHashMap.put("zq", TextUtils.isEmpty(uuid) ? "1234" : uuid);//uuid  默认1234
         final String city = BaseApplication.getApplication().getCityCode();
         localHashMap.put("zp", TextUtils.isEmpty(city) ? "10000" : city);//城市 默认10000
+        //localHashMap.put("zp", "121000");//城市 默认10000
         localHashMap.put("zo", "86");//国际区号 默认中国86
         final String userid = BaseApplication.getApplication().getLogin_Int(Constants.USER_B) + "";
         localHashMap.put("zn", TextUtils.isEmpty(userid) ? "0" : userid);//UserId 默认0

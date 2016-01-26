@@ -13,6 +13,7 @@ import com.lidroid.xutils.http.callback.RequestCallBack;
 import com.qqdhelper.BaseApplication;
 import com.qqdhelper.Constant;
 import com.qqdhelper.Constants;
+import com.qqdhelper.bean.BaseBean;
 import com.qqdhelper.bean.prouder.ProuderItem;
 import com.qqdhelper.bean.prouder.ProuderList;
 import com.qqdhelper.net.HttpHelperPost;
@@ -26,7 +27,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
-
+import java.util.Random;
+/**
+ * 自动查询
+ * */
 public class QueryProduct implements Runnable {
     private static QueryProduct mQueryProduct;
     private static Thread mMainThread;
@@ -62,7 +66,7 @@ public class QueryProduct implements Runnable {
                     mMainThread.start();
                     //}
                 }
-            }, 1500);
+            }, 1000);//原值1500
         } else {
             //if (key != null && !key.isEmpty())
             mMainThread.start();
@@ -141,11 +145,13 @@ public class QueryProduct implements Runnable {
             public void onSuccess(ResponseInfo<Object> responseInfo) {
                 Gson a = new Gson();
                 ProuderList prouderList = a.fromJson(responseInfo.result.toString(), ProuderList.class);
-                Log.e("xx", "查询结果:" + cityName + "的" + key + "===" + responseInfo.result.toString());
+                //Log.e("xx", "查询结果:" + cityName + "的" + key + "===" + responseInfo.result.toString());
+                Log.e("xx", "===" + responseInfo.result.toString());
                 if (prouderList.getCode() == 0) {
                     List<ProuderItem> list = prouderList.getA();
                     if (list != null) {
                         for (ProuderItem prouderItem : list) {
+                            System.out.println("商家名称：" + prouderItem.getA());
                             System.out.println("商家编号：" + prouderItem.getP());
                             dealMerchantsNo(prouderItem.getP());
                             dealProductTime(prouderItem.getE());
@@ -159,7 +165,7 @@ public class QueryProduct implements Runnable {
                                 temp_key = "少于FV" + FV + "的商品";
                             }
                             if (FV > 0) {
-                                if (prouderItem.getF() > 0 && Integer.parseInt(prouderItem.getB()) <= FV && Integer.parseInt(prouderItem.getB()) >= 1000) {
+                                if (prouderItem.getF() > 0 && Integer.parseInt(prouderItem.getB()) <= FV && Integer.parseInt(prouderItem.getB()) >= 10) {
                                     if (PastDay < 0) {//判断是否为新店
                                         if (Integer.parseInt(dealMerchantsNo(prouderItem.getP())) >= Integer.parseInt(getPastDay(d, PastDay))) {
                                             SendNewMail(cityName, temp_key, prouderItem);
@@ -200,7 +206,7 @@ public class QueryProduct implements Runnable {
 
         HashMap<String, String> param = new HashMap<>();
         param.put("a", BaseApplication.getApplication().getLogin_Int(Constants.USER_B) + "");
-        param.put("b", prouderItem.getJ() + "");
+        param.put("b", prouderItem.getJ() + "");//商家代号
         HttpHelperPost.Post(mContext, "http://4.everything4free.com/c/ln", param, new RequestCallBack<Object>() {
             @Override
             public void onSuccess(ResponseInfo<Object> responseInfo) {
@@ -208,7 +214,7 @@ public class QueryProduct implements Runnable {
                 Gson ma = new Gson();
                 ProuderItem prouderItem1 = ma.fromJson(responseInfo.result.toString(), ProuderItem.class);
                 if(Integer.parseInt(prouderItem1.getB()) > 0 && (Integer.parseInt(prouderItem1.getB()) - Integer.parseInt(prouderItem.getB())) >= 0){
-                    autoExchange(cityName,temp_key,prouderItem);//执行自动兑换程序
+                    autoExchange(cityName, temp_key, prouderItem);//执行自动兑换程序
                 } else {
                     Toast.makeText(mContext,"商家每天最多可接受10w FV",Toast.LENGTH_SHORT).show();
                 }
@@ -221,26 +227,30 @@ public class QueryProduct implements Runnable {
         }, null);
     }
 
-    private void autoExchange(final String mcityName, final String mcityKey, final ProuderItem mprouderItem) {
-        if (TextUtils.isEmpty(BaseApplication.PWD)) {
+    private void autoExchange(final String mcityName, final String mProKey, final ProuderItem mprouderItem) {
+        if (TextUtils.isEmpty(BaseApplication.PAY_PWD)) {
             Log.e("xx", "没有兑换密码");
             return;
         }
-        if (!TextUtils.isEmpty(BaseApplication.MSG) && !mprouderItem.getA().contains(BaseApplication.MSG)) {
-            Log.e("xx", mprouderItem.getA() + "-不包含关键字-" + BaseApplication.MSG);
+        if (!TextUtils.isEmpty(BaseApplication.AUTO_MSG) && !mprouderItem.getA().contains(BaseApplication.AUTO_MSG)) {
+            Log.e("xx", mprouderItem.getA() + "-不包含关键字-" + BaseApplication.AUTO_MSG);
             return;
         }
         HashMap<String, String> param = new HashMap<>();
         param.put("a", BaseApplication.getApplication().getLogin_Int(Constants.USER_B) + "");
-        param.put("b", mprouderItem.getH() + "");
+        param.put("b", mprouderItem.getH() + "");//商品代号
         param.put("c", "1");
-        param.put("d", mprouderItem.getJ() + "");
-        param.put("e", z.getRSA(mContext, BaseApplication.PWD));
+        param.put("d", mprouderItem.getJ() + "");//商家代号
+        param.put("e", z.getRSA(mContext, BaseApplication.PAY_PWD));
         HttpHelperPost.Post(mContext, "http://4.everything4free.com/c/ag", param, new RequestCallBack<Object>() {
             @Override
             public void onSuccess(ResponseInfo<Object> responseInfo) {
                 Log.e("xx", "兑换结果:" + responseInfo.result.toString());
-                autoES_SendMail(mcityName,mcityKey,mprouderItem);
+                Gson ma = new Gson();
+                BaseBean baseBean1 = ma.fromJson(responseInfo.result.toString(), BaseBean.class);
+                if (baseBean1.getCode() == 0) {
+                    autoES_SendMail(mcityName,mProKey,mprouderItem);
+                }
             }
 
             @Override
@@ -255,9 +265,29 @@ public class QueryProduct implements Runnable {
         for (String receicveer : Constant.receiveer) {
             System.out.println("邮件发送程序开始执行......");
             sm.sendMails(receicveer, "Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + temp_key + " 有货啦！！！", new StringBuffer(
-                    "赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> (开店时间：<U>" + dealDate(dealMerchantsNo(prouderItem.getP())) + "</U>) 兑换 <U>" + prouderItem.getA() + "</U> (上架时间：<U>"+ dealDate2(dealProductTime(prouderItem.getE()))+"</U>)， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
+                    "赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> (mNo：<U>" + prouderItem.getJ() + "</U> 开店时间：<U>" + dealDate(dealMerchantsNo(prouderItem.getP())) + "</U>) 兑换 <U>" + prouderItem.getA() + "</U> (pNo：<U>" + prouderItem.getH() + "</U> 上架时间：<U>"+ dealDate2(dealProductTime(prouderItem.getE()))+"</U>)， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
             System.out.println("邮件发送程序执行完毕！");
         }
+
+//        switch (temp_key){
+//            case "平板":
+//            case "ipad":
+//                sm.sendMails("hushenglinchn@163.com", "Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + temp_key + " 有货啦！！！", new StringBuffer(
+//                        "赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> (mNo：<U>" + prouderItem.getJ() + "</U> 开店时间：<U>" + dealDate(dealMerchantsNo(prouderItem.getP())) + "</U>) 兑换 <U>" + prouderItem.getA() + "</U> (pNo：<U>" + prouderItem.getH() + "</U> 上架时间：<U>"+ dealDate2(dealProductTime(prouderItem.getE()))+"</U>)， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
+//                break;
+//            case "苹果手机":
+//            case "iphone":
+//                sm.sendMails("hbxflijian@163.com", "Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + temp_key + " 有货啦！！！", new StringBuffer(
+//                        "赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> (mNo：<U>" + prouderItem.getJ() + "</U> 开店时间：<U>" + dealDate(dealMerchantsNo(prouderItem.getP())) + "</U>) 兑换 <U>" + prouderItem.getA() + "</U> (pNo：<U>" + prouderItem.getH() + "</U> 上架时间：<U>"+ dealDate2(dealProductTime(prouderItem.getE()))+"</U>)， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
+//                break;
+//            case "光波炉":
+//            case "微波炉":
+//                sm.sendMails("cscc040426@163.com", "Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + temp_key + " 有货啦！！！", new StringBuffer(
+//                        "赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> (mNo：<U>" + prouderItem.getJ() + "</U> 开店时间：<U>" + dealDate(dealMerchantsNo(prouderItem.getP())) + "</U>) 兑换 <U>" + prouderItem.getA() + "</U> (pNo：<U>" + prouderItem.getH() + "</U> 上架时间：<U>"+ dealDate2(dealProductTime(prouderItem.getE()))+"</U>)， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  新店开张，数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
+//                break;
+//        }
+//        sm.sendMails("13235809610@163.com", "Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + temp_key + " 有货啦！！！", new StringBuffer(
+//                "赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> (mNo：<U>" + prouderItem.getJ() + "</U> 开店时间：<U>" + dealDate(dealMerchantsNo(prouderItem.getP())) + "</U>) 兑换 <U>" + prouderItem.getA() + "</U> (pNo：<U>" + prouderItem.getH() + "</U> 上架时间：<U>"+ dealDate2(dealProductTime(prouderItem.getE()))+"</U>)， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
     }
 
     private void SendNewMail(String cityName, String temp_key, ProuderItem prouderItem) {
@@ -265,9 +295,29 @@ public class QueryProduct implements Runnable {
         for (String receicveer : Constant.receiveer) {
             System.out.println("邮件发送程序开始执行......");
             sm.sendMails(receicveer, "新店提醒~~ Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + temp_key + " 有货啦！！！", new StringBuffer(
-                    "新店号外！新店号外！新店号外！<br>赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> (开店时间：<U>" + dealDate(dealMerchantsNo(prouderItem.getP())) + "</U>) 兑换 <U>" + prouderItem.getA() + "</U> (上架时间：<U>"+ dealDate2(dealProductTime(prouderItem.getE()))+"</U>)， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  新店开张，数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
+                    "新店号外！新店号外！新店号外！<br>赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> (mNo：<U>" + prouderItem.getJ() + "</U> 开店时间：<U>" + dealDate(dealMerchantsNo(prouderItem.getP())) + "</U>) 兑换 <U>" + prouderItem.getA() + "</U> (pNo：<U>" + prouderItem.getH() + "</U> 上架时间：<U>"+ dealDate2(dealProductTime(prouderItem.getE()))+"</U>)， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  新店开张，数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
             System.out.println("邮件发送程序执行完毕！");
         }
+
+//        switch (temp_key){
+//            case "平板":
+//            case "ipad":
+//                sm.sendMails("hushenglinchn@163.com", "新店提醒~~ Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + temp_key + " 有货啦！！！", new StringBuffer(
+//                        "新店号外！新店号外！新店号外！<br>赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> (mNo：<U>" + prouderItem.getJ() + "</U> 开店时间：<U>" + dealDate(dealMerchantsNo(prouderItem.getP())) + "</U>) 兑换 <U>" + prouderItem.getA() + "</U> (pNo：<U>" + prouderItem.getH() + "</U> 上架时间：<U>"+ dealDate2(dealProductTime(prouderItem.getE()))+"</U>)， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  新店开张，数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
+//                break;
+//            case "苹果手机":
+//            case "iphone":
+//                sm.sendMails("hbxflijian@163.com", "新店提醒~~ Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + temp_key + " 有货啦！！！", new StringBuffer(
+//                        "新店号外！新店号外！新店号外！<br>赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> (mNo：<U>" + prouderItem.getJ() + "</U> 开店时间：<U>" + dealDate(dealMerchantsNo(prouderItem.getP())) + "</U>) 兑换 <U>" + prouderItem.getA() + "</U> (pNo：<U>" + prouderItem.getH() + "</U> 上架时间：<U>"+ dealDate2(dealProductTime(prouderItem.getE()))+"</U>)， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  新店开张，数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
+//                break;
+//            case "光波炉":
+//            case "微波炉":
+//                sm.sendMails("cscc040426@163.com", "新店提醒~~ Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + temp_key + " 有货啦！！！", new StringBuffer(
+//                    "新店号外！新店号外！新店号外！<br>赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> (mNo：<U>" + prouderItem.getJ() + "</U> 开店时间：<U>" + dealDate(dealMerchantsNo(prouderItem.getP())) + "</U>) 兑换 <U>" + prouderItem.getA() + "</U> (pNo：<U>" + prouderItem.getH() + "</U> 上架时间：<U>"+ dealDate2(dealProductTime(prouderItem.getE()))+"</U>)， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  新店开张，数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
+//            break;
+//        }
+//        sm.sendMails("13235809610@163.com", "新店提醒~~ Teemo提醒您：" + cityName + " 的 " + prouderItem.getK() + " 的 " + temp_key + " 有货啦！！！", new StringBuffer(
+//                "新店号外！新店号外！新店号外！<br>赶快打开QQD，去 <U>" + cityName + "</U> 的 <U>" + prouderItem.getK() + "</U> (mNo：<U>" + prouderItem.getJ() + "</U> 开店时间：<U>" + dealDate(dealMerchantsNo(prouderItem.getP())) + "</U>) 兑换 <U>" + prouderItem.getA() + "</U> (pNo：<U>" + prouderItem.getH() + "</U> 上架时间：<U>"+ dealDate2(dealProductTime(prouderItem.getE()))+"</U>)， FV：<U>" + prouderItem.getB() + "</U>，  当前数量：<U>" + prouderItem.getF() + "</U>。  新店开张，数量有限，先兑先得！<br>各位加油~  么么哒~<br><p align='right'>Teemo  " + current_Time + "</p>"));
     }
 
     private void autoES_SendMail(String cityName, String temp_key, ProuderItem prouderItem) {

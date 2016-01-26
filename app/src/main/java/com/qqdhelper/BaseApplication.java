@@ -27,8 +27,10 @@ public class BaseApplication extends Application {
     private String cityCode;
     private String cityName;
 
-    public static String PWD;
-    public static String MSG;
+    /**支付密码*/
+    public static String PAY_PWD;
+    /**兑换限制 (自动兑换商品关键字)*/
+    public static String AUTO_MSG;
 
     private SharedPreferences mSharedPreferences;//保存本地资料
     private List<ProuderItem> citys;
@@ -72,15 +74,14 @@ public class BaseApplication extends Application {
 //            keys.add("vivo");
 //            keys.add("华为");
 //            keys.add("iphone");
-            keys.add("邮费");
-//            keys.add("微波炉");
-//            keys.add("光波炉");
-//            keys.add("苹果手机");
-//            keys.add("苹果电脑");
-//            keys.add("mac");
-//            keys.add("旅游");
-//            keys.add("旅行");
-//            keys.add("手环");
+//            keys.add("邮费");
+
+                keys.add("苹果手机");
+                keys.add("iphone");
+                keys.add("ipda");
+                keys.add("平板");
+                keys.add("苹果电脑");
+                keys.add("mac");
         }
     }
 

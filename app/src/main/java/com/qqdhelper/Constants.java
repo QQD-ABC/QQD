@@ -49,6 +49,8 @@ public class Constants {
 	public static final String INTENT_FV = "INTENT_fv";
 	/** 查询商品 新店查询 广播传递标记*/
 	public static final String INTENT_NEW = "INTENT_new";
+	/** 查询商品 自动兑换 广播传递标记*/
+	public static final String INTENT_AUTO = "INTENT_auto";
 	/** 查询商品 广播地址*/
-	public static final String QUERYACTION = "android.com.qqdhelper.broadcastreceiver.action.QUERYACTION";
+	public static final String QQDACTION = "android.com.qqdhelper.broadcastreceiver.action.QQDACTION";
 }

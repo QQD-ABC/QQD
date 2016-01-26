@@ -35,7 +35,7 @@
             android:label="@string/title_activity_validatephone" />
 
         <!-- 为广播接收组件注册 -->
-        <receiver android:name=".broadcast.QueryBroadcastReceiver">
+        <receiver android:name=".broadcast.QQDBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.com.qqdhelper.broadcastreceiver.action.QUERYACTION" />
 

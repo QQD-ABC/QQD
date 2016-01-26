@@ -67,25 +67,27 @@
                 android:id="@+id/pay_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="兑换密码(输入后开始自动兑换)"
+                android:hint="兑换密码(输入执行自动兑换，不输入则执行查询)"
                 android:imeActionId="@+id/login"
                 android:imeActionLabel="@string/action_sign_in_short"
                 android:imeOptions="actionUnspecified"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textSize="14sp" />
 
             <EditText
                 android:id="@+id/pay_msg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="兑换限制"
+                android:hint="兑换限制（指定兑换条件，可不填）"
                 android:imeActionId="@+id/login"
                 android:imeActionLabel="@string/action_sign_in_short"
                 android:imeOptions="actionUnspecified"
                 android:inputType="text"
                 android:maxLines="1"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textSize="14sp" />
 
             <Button
                 android:id="@+id/phone_sign_in_button"

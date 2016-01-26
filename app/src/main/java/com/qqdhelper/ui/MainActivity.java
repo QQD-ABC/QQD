@@ -44,31 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-//        HashMap<String, String> param = new HashMap<>();
-//        param.put("a", "71901");
-//        param.put("c", "1");
-//        param.put("d", "15");
-//        param.put("e", "0");
-//        param.put("f", "iPad");
-//        HttpHelperPost.Post(this, "http://4.everything4free.com/c/ae", param, new RequestCallBack<Object>() {
-//            @Override
-//            public void onSuccess(ResponseInfo<Object> responseInfo) {
-//                Log.e("xx", "responseInfo" + responseInfo);
-//            }
-//
-//            @Override
-//            public void onFailure(HttpException error, String msg) {
-//                Log.e("xx", msg);
-//            }
-//        }, null);
-        z.getRSA(this, "a123456");
-        SendMail sm = new SendMail();
-        for (String receicveer : Constant.receiveer) {
-            System.out.println("邮件发送程序开始执行......");
-//            BaseApplication.getApplication().get
-            sm.sendMails(receicveer, "Teemo提醒您：开始监听~", new StringBuffer("asd"));
-            System.out.println("邮件发送程序执行完毕！");
-        }
+
     }
 
     @Override
