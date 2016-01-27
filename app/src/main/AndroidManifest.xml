@@ -37,7 +37,7 @@
         <!-- 为广播接收组件注册 -->
         <receiver android:name=".broadcast.QQDBroadcastReceiver">
             <intent-filter>
-                <action android:name="android.com.qqdhelper.broadcastreceiver.action.QUERYACTION" />
+                <action android:name="android.com.qqdhelper.broadcastreceiver.action.QQDACTION" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
