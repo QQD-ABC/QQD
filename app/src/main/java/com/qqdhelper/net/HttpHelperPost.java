@@ -54,7 +54,7 @@ public class HttpHelperPost {
         localHashMap.put("zu", Build.MANUFACTURER + " " + Build.MODEL);//机器型号
         localHashMap.put("zt", Build.VERSION.RELEASE);//系统版本
         localHashMap.put("zs", "2");//设备代码 1：ios 2：Android==========
-        localHashMap.put("zr", "1.055");//QQD 程序版本==========
+        localHashMap.put("zr", "2.000");//QQD 程序版本==========
         final String uuid = BaseApplication.getApplication().getLogin_String(Constants.USER_A);
         localHashMap.put("zq", TextUtils.isEmpty(uuid) ? "1234" : uuid);//uuid  默认1234
         final String city = BaseApplication.getApplication().getCityCode();
