@@ -80,12 +80,9 @@ public class BaseApplication extends Application {
 //            keys.add("iphone");
 //            keys.add("邮费");
 
-                keys.add("苹果手机");
-                keys.add("iphone");
-                keys.add("ipda");
-                keys.add("平板");
-                keys.add("苹果电脑");
-                keys.add("mac");
+            keys.add("保温杯");
+            keys.add("保温瓶");
+            keys.add("小蚁摄像机");
         }
     }
 
